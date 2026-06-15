@@ -1,0 +1,175 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  BENEFACTOR
+}
+
+enum DonationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          Role           @default(BENEFACTOR)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  benefactor    Benefactor?
+  posts         Post[]
+  news          News[]
+  announcements Announcement[]
+  logs          AdminLog[]
+}
+
+model Benefactor {
+  id           String      @id @default(uuid())
+  userId       String      @unique
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cpf          String      @unique
+  birthDate    DateTime
+  phone        String
+  address      String
+  militaryRank String      // "Coronel" | "Tenente-Coronel" | "Major" | "Capitão" | "Primeiro Tenente" | "Segundo Tenente"
+  joinDate     DateTime    @default(now())
+  donations    Donation[]
+}
+
+model Donation {
+  id           String         @id @default(uuid())
+  amount       Float
+  date         DateTime       @default(now())
+  status       DonationStatus @default(PENDING)
+  benefactorId String
+  benefactor   Benefactor     @relation(fields: [benefactorId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  bannerUrl   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  projects    Project[]
+  posts       Post[]
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String   @db.Text
+  summary     String   @db.Text
+  bannerUrl   String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Post {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  summary     String      @db.Text
+  content     String      @db.Text
+  coverImage  String?
+  gallery     String[]    // stored as JSON or string array
+  status      String      @default("Draft") // "Draft" | "Published"
+  authorId    String
+  author      User        @relation(fields: [authorId], references: [id])
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model News {
+  id          String   @id @default(uuid())
+  title       String
+  subtitle    String?
+  summary     String   @db.Text
+  content     String   @db.Text
+  coverImage  String?
+  gallery     String[]
+  status      String   @default("Draft") // "Draft" | "Published"
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CarouselImage {
+  id          String   @id @default(uuid())
+  title       String?
+  description String?
+  imageUrl    String
+  linkUrl     String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model Announcement {
+  id        String   @id @default(uuid())
+  title     String
+  content   String   @db.Text
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model SiteSettings {
+  id           String   @id @default("singleton")
+  name         String   @default("Associação Cristo Rei do Universo")
+  logoUrl      String?
+  address      String?
+  phone        String?
+  email        String?
+  facebook     String?
+  instagram    String?
+  youtube      String?
+  pixKey       String?
+  pixQrCode    String?  // base64 image data or URL
+  pixBank      String?
+  pixReceiver  String?
+  thankYouMsg  String?  @default("Muito obrigado por sua doação e por fazer parte do Exército de Cristo Rei!")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model MediaFile {
+  id        String   @id @default(uuid())
+  filename  String
+  filepath  String
+  filetype  String
+  size      Int
+  createdAt DateTime @default(now())
+}
+
+model AdminLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
