@@ -105,7 +105,7 @@ export async function getNewsByRealSlug(slug: string) {
       where: {
         OR: [
           { id: slug },
-          { title: { mode: 'insensitive', equals: slug.replace(/-/g, ' ') } }
+          { title: { equals: slug.replace(/-/g, ' ') } }
         ]
       }
     });

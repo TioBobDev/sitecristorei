@@ -130,10 +130,14 @@ export default async function AdminLayout({
       </aside>
 
       {/* Área do Painel */}
-      <main className="flex-1 p-6 md:p-10 max-h-screen overflow-y-auto">
-        <div className="container mx-auto space-y-8">
+      <main className="flex-1 p-6 md:p-10 max-h-screen overflow-y-auto flex flex-col justify-between">
+        <div className="container mx-auto space-y-8 flex-1">
           {children}
         </div>
+        <footer className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground/75 shrink-0">
+          <p>© 2026 Associação Cristo Rei do Universo. Todos os direitos reservados.</p>
+          <p className="mt-1">Desenvolvido com fé e dedicação social.</p>
+        </footer>
       </main>
     </div>
   );

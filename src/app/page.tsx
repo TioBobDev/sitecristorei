@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Award, BookOpen, Music, Activity, Calendar, FileText, ArrowRight, Heart } from 'lucide-react';
 import { HomeCarousel } from '@/components/HomeCarousel';
 import { DonationButton } from '@/components/DonationButton';
+import { ClientImage } from '@/components/ClientImage';
 import {
   getCarouselImages,
   getLatestNews,
@@ -42,9 +43,9 @@ export default async function HomePage() {
       <HomeCarousel slides={slides} />
 
       {/* 2. Hero Principal */}
-      <section className="py-20 bg-gradient-to-b from-primary to-[#0f2547] text-primary-foreground border-b border-secondary/20">
+      <section className="py-20 bg-primary text-primary-foreground border-b border-secondary/20">
         <div className="container mx-auto px-4 sm:px-6 text-center max-w-4xl space-y-6">
-          <span className="text-secondary font-serif text-lg md:text-xl font-semibold tracking-wider block uppercase">
+          <span className="text-ouro font-serif text-lg md:text-xl font-semibold tracking-wider block uppercase">
             Aliste-se nesta Missão
           </span>
           <h1 className="font-serif text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight">
@@ -54,7 +55,7 @@ export default async function HomePage() {
             Transformando vidas através da educação, cultura, fé e solidariedade.
           </p>
           <div className="pt-4 flex justify-center">
-            <DonationButton className="h-14 px-8 text-base font-bold bg-secondary text-primary hover:bg-secondary/90 transition shadow-lg shadow-secondary/15 cursor-pointer">
+            <DonationButton className="h-14 px-8 text-base font-bold bg-ouro text-carmo hover:bg-ouro-bianco hover:text-carmo transition shadow-lg shadow-ouro/15 cursor-pointer">
               Faça Parte do Exército de Cristo Rei
             </DonationButton>
           </div>
@@ -125,7 +126,7 @@ export default async function HomePage() {
             <div className="text-center md:text-right shrink-0">
               <Link
                 href="/noticias"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-card text-sm font-bold hover:bg-primary hover:text-secondary hover:border-primary transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border bg-card text-sm font-bold hover:bg-primary hover:text-primary-foreground hover:border-primary transition cursor-pointer"
               >
                 Ver Todas as Notícias <ArrowRight className="h-4 w-4" />
               </Link>
@@ -145,13 +146,11 @@ export default async function HomePage() {
                 >
                   <div className="aspect-video w-full overflow-hidden bg-muted relative">
                     {news.coverImage ? (
-                      <img
+                      <ClientImage
                         src={news.coverImage}
                         alt={news.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/logo.png';
-                        }}
+                        fallbackSrc="/images/logo.png"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-lg font-bold">
@@ -203,7 +202,7 @@ export default async function HomePage() {
           Ao escolher uma modalidade de patrocínio militar social, você ajuda diretamente na manutenção de insumos e na contratação de professores voluntários que cuidam das nossas crianças e idosos.
         </p>
         <div className="pt-2">
-          <DonationButton className="h-12 px-6 bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer" />
+          <DonationButton className="h-12 px-6 bg-primary text-primary-foreground hover:bg-ouro hover:text-carmo transition font-bold cursor-pointer" />
         </div>
       </section>
 

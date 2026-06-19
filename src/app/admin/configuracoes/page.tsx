@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
-import { Settings, Check, AlertCircle, Sparkles } from 'lucide-react';
+import { Settings, Check, AlertCircle, Sparkles, DollarSign } from 'lucide-react';
 
 export default function ConfiguracoesAdminPage() {
   const { data: session } = useSession();
@@ -226,7 +226,7 @@ export default function ConfiguracoesAdminPage() {
           </CardContent>
         </Card>
 
-        <Button type="submit" disabled={isPending} className="w-full h-12 bg-primary text-secondary hover:bg-secondary hover:text-primary font-bold transition cursor-pointer">
+        <Button type="submit" disabled={isPending} className="w-full h-12 bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold transition cursor-pointer">
           {isPending ? 'Salvando Configurações...' : 'Salvar Todas as Configurações'}
         </Button>
       </form>

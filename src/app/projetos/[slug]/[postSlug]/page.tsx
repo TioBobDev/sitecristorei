@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Calendar, ArrowLeft, User, Image as ImageIcon } from 'lucide-react';
 import { getPostBySlug } from '@/services/actions/site.actions';
+import { ClientImage } from '@/components/ClientImage';
 
 interface Params {
   params: Promise<{ slug: string; postSlug: string }>;
@@ -17,6 +18,8 @@ export default async function ProjectPostDetailPage({ params }: Params) {
   if (!post || post.category.slug !== slug) {
     notFound();
   }
+
+  const gallery = (post.gallery as string[]) || [];
 
   return (
     <article className="w-full min-h-screen py-12 bg-background">
@@ -58,13 +61,11 @@ export default async function ProjectPostDetailPage({ params }: Params) {
         {/* Imagem de Capa */}
         <div className="aspect-video w-full rounded-2xl overflow-hidden bg-muted border border-border relative">
           {post.coverImage ? (
-            <img
+            <ClientImage
               src={post.coverImage}
               alt={post.title}
               className="w-full h-full object-cover"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = '/images/logo.png';
-              }}
+              fallbackSrc="/images/logo.png"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-2xl font-bold">
@@ -80,25 +81,23 @@ export default async function ProjectPostDetailPage({ params }: Params) {
         />
 
         {/* Galeria de Imagens do Post */}
-        {post.gallery && post.gallery.length > 0 && (
+        {gallery && gallery.length > 0 && (
           <div className="pt-8 border-t border-border space-y-4">
             <h3 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground flex items-center gap-2">
               <ImageIcon className="h-5 w-5 text-secondary" />
               Galeria do Post
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {post.gallery.map((imgUrl, index) => (
+              {gallery.map((imgUrl, index) => (
                 <div
                   key={index}
                   className="aspect-square rounded-xl overflow-hidden border border-border bg-muted relative hover:opacity-95 transition"
                 >
-                  <img
+                  <ClientImage
                     src={imgUrl}
                     alt={`Imagem ${index + 1} de ${post.title}`}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/images/logo.png';
-                    }}
+                    fallbackSrc="/images/logo.png"
                   />
                 </div>
               ))}

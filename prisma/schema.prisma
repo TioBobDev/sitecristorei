@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -92,7 +92,7 @@ model Post {
   summary     String      @db.Text
   content     String      @db.Text
   coverImage  String?
-  gallery     String[]    // stored as JSON or string array
+  gallery     Json?       // stored as JSON or string array
   status      String      @default("Draft") // "Draft" | "Published"
   authorId    String
   author      User        @relation(fields: [authorId], references: [id])
@@ -109,7 +109,7 @@ model News {
   summary     String   @db.Text
   content     String   @db.Text
   coverImage  String?
-  gallery     String[]
+  gallery     Json?
   status      String   @default("Draft") // "Draft" | "Published"
   authorId    String
   author      User     @relation(fields: [authorId], references: [id])

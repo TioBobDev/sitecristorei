@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Calendar, ArrowRight, BookOpen, Image as ImageIcon } from 'lucide-react';
 import { getCategoryBySlug } from '@/services/actions/site.actions';
+import { ClientImage } from '@/components/ClientImage';
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -29,16 +30,14 @@ export default async function CategoryPage({ params }: Params) {
       <div className="relative w-full h-[250px] md:h-[380px] bg-primary">
         <div className="absolute inset-0 bg-black/60 z-10" />
         {category.bannerUrl ? (
-          <img
+          <ClientImage
             src={category.bannerUrl}
             alt={category.name}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/images/carousel/hero-1.jpg';
-            }}
+            fallbackSrc="/images/carousel/hero-1.jpg"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-r from-primary to-[#0f2547]" />
+          <div className="w-full h-full bg-gradient-to-r from-primary to-secondary" />
         )}
         <div className="absolute inset-0 z-20 flex items-center justify-center p-6 text-center">
           <div className="max-w-3xl text-primary-foreground space-y-3">
@@ -99,13 +98,11 @@ export default async function CategoryPage({ params }: Params) {
                     key={index}
                     className="aspect-square rounded-xl overflow-hidden border border-border bg-muted relative"
                   >
-                    <img
+                    <ClientImage
                       src={imgUrl}
                       alt={`Imagem ${index + 1} de ${category.name}`}
                       className="w-full h-full object-cover hover:scale-105 transition duration-300"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/logo.png';
-                      }}
+                      fallbackSrc="/images/logo.png"
                     />
                   </div>
                 ))}
@@ -133,13 +130,11 @@ export default async function CategoryPage({ params }: Params) {
                 >
                   <div className="aspect-video w-full overflow-hidden bg-muted relative">
                     {post.coverImage ? (
-                      <img
+                      <ClientImage
                         src={post.coverImage}
                         alt={post.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/images/logo.png';
-                        }}
+                        fallbackSrc="/images/logo.png"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/20 flex items-center justify-center text-secondary font-bold text-xs">

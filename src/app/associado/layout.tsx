@@ -59,10 +59,14 @@ export default async function AssociadoLayout({
       </aside>
 
       {/* Conteúdo Principal */}
-      <main className="flex-1 p-6 md:p-8">
-        <div className="container mx-auto max-w-4xl space-y-6">
+      <main className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+        <div className="container mx-auto max-w-4xl space-y-6 flex-1">
           {children}
         </div>
+        <footer className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground/75 shrink-0">
+          <p>© 2026 Associação Cristo Rei do Universo. Todos os direitos reservados.</p>
+          <p className="mt-1">Desenvolvido com fé e dedicação social.</p>
+        </footer>
       </main>
     </div>
   );

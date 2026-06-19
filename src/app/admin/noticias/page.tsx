@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/ImageUpload';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
@@ -200,12 +201,11 @@ export default function NoticiasAdminPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="not-cover">URL da Imagem de Capa (Opcional)</Label>
-                  <Input
-                    id="not-cover"
+                  <Label>Imagem de Capa</Label>
+                  <ImageUpload
                     value={coverImage}
-                    onChange={(e) => setCoverImage(e.target.value)}
-                    placeholder="Ex: /images/news/evento.jpg"
+                    onChange={(url) => setCoverImage(url)}
+                    placeholder="Selecione ou arraste a imagem de capa"
                   />
                 </div>
 
@@ -283,7 +283,7 @@ export default function NoticiasAdminPage() {
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className={`bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer ${
+                    className={`bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco transition font-bold cursor-pointer ${
                       editingId ? 'w-2/3' : 'w-full'
                     }`}
                   >

@@ -27,9 +27,9 @@ export function DonationButton({
       <>
         <button
           onClick={() => setOpen(true)}
-          className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full bg-secondary text-primary font-bold shadow-2xl hover:scale-105 transition-all duration-300 border border-accent hover:bg-accent/95 cursor-pointer shadow-secondary/25 animate-bounce ${className}`}
+          className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3.5 rounded-full bg-secondary text-ouro-bianco font-bold shadow-2xl hover:scale-105 transition-all duration-300 border border-ouro hover:bg-primary cursor-pointer shadow-secondary/25 animate-bounce ${className}`}
         >
-          <Heart className="h-5 w-5 fill-current text-primary animate-pulse" />
+          <Heart className="h-5 w-5 fill-current text-ouro-bianco animate-pulse" />
           <span className="text-sm tracking-wide font-serif">Quero ser um Benfeitor</span>
         </button>
         <DonationModal open={open} onOpenChange={setOpen} />

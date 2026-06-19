@@ -6,7 +6,15 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/ImageUpload';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import {
   Table,
   TableBody,
@@ -185,13 +193,11 @@ export default function CarrosselAdminPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="car-img">Caminho / URL da Imagem</Label>
-                  <Input
-                    id="car-img"
+                  <Label>Imagem do Slide</Label>
+                  <ImageUpload
                     value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="Ex: /images/carousel/hero-1.jpg"
-                    required
+                    onChange={(url) => setImageUrl(url)}
+                    placeholder="Recomendado: 1920x800px (Banner largo)"
                   />
                 </div>
 
@@ -243,7 +249,7 @@ export default function CarrosselAdminPage() {
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className={`bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer ${
+                    className={`bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco transition font-bold cursor-pointer ${
                       editingId ? 'w-2/3' : 'w-full'
                     }`}
                   >

@@ -44,7 +44,7 @@ export default async function RootLayout({
         <Providers>
           <Navbar categories={categories} siteSettings={siteSettings} session={session} />
           <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
+          <Footer siteSettings={siteSettings} />
         </Providers>
       </body>
     </html>

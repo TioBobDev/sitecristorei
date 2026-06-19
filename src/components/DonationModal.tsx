@@ -239,7 +239,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               </div>
             </div>
 
-            <Button onClick={handleNextStep} className="w-full h-12 text-base font-bold bg-primary text-secondary hover:bg-secondary hover:text-primary cursor-pointer transition">
+            <Button onClick={handleNextStep} className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition">
               Avançar para o Cadastro <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -313,7 +313,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               <Button type="button" variant="outline" onClick={() => setStep(1)} className="w-1/3 cursor-pointer">
                 Voltar
               </Button>
-              <Button type="submit" disabled={submitting} className="w-2/3 bg-primary text-secondary hover:bg-secondary hover:text-primary cursor-pointer transition font-bold">
+              <Button type="submit" disabled={submitting} className="w-2/3 bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition font-bold">
                 {submitting ? 'Alistando...' : 'Finalizar Alistamento'}
               </Button>
             </div>
@@ -364,7 +364,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               Utilize o e-mail cadastrado e sua senha para fazer login e conferir o andamento de suas doações.
             </div>
 
-            <Button onClick={handleClose} className="w-full h-12 text-base font-bold bg-primary text-secondary hover:bg-secondary hover:text-primary cursor-pointer transition">
+            <Button onClick={handleClose} className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition">
               Fechar e Acessar
             </Button>
           </div>

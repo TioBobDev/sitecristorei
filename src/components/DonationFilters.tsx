@@ -50,7 +50,7 @@ export function DonationFilters() {
         <Label className="text-xs font-semibold text-muted-foreground uppercase">Ano</Label>
         <Select
           value={currentYear}
-          onValueChange={(val) => updateFilters('year', val)}
+          onValueChange={(val) => updateFilters('year', val || 'ALL')}
         >
           <SelectTrigger className="w-full h-10 border border-input rounded-lg">
             <SelectValue placeholder="Selecione o ano" />
@@ -70,7 +70,7 @@ export function DonationFilters() {
         <Label className="text-xs font-semibold text-muted-foreground uppercase">Mês</Label>
         <Select
           value={currentMonth}
-          onValueChange={(val) => updateFilters('month', val)}
+          onValueChange={(val) => updateFilters('month', val || 'ALL')}
         >
           <SelectTrigger className="w-full h-10 border border-input rounded-lg">
             <SelectValue placeholder="Todos os meses" />
@@ -91,7 +91,7 @@ export function DonationFilters() {
         <Label className="text-xs font-semibold text-muted-foreground uppercase">Status</Label>
         <Select
           value={currentStatus}
-          onValueChange={(val) => updateFilters('status', val)}
+          onValueChange={(val) => updateFilters('status', val || 'ALL')}
         >
           <SelectTrigger className="w-full h-10 border border-input rounded-lg">
             <SelectValue placeholder="Todos os status" />

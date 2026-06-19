@@ -180,7 +180,7 @@ export default function CategoriasAdminPage() {
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className={`bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer ${
+                    className={`bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco transition font-bold cursor-pointer ${
                       editingId ? 'w-2/3' : 'w-full'
                     }`}
                   >

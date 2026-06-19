@@ -122,7 +122,7 @@ export default async function ContatoPage() {
                 />
               </div>
 
-              <Button type="submit" className="w-full h-12 bg-primary text-secondary hover:bg-secondary hover:text-primary font-bold transition cursor-pointer">
+              <Button type="submit" className="w-full h-12 bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold transition cursor-pointer">
                 Enviar Mensagem <Send className="ml-2 h-4 w-4" />
               </Button>
             </form>

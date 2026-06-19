@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { signIn } from 'next-auth/react';
-import { Shield, Eye, EyeOff, Lock, Mail, ArrowLeft } from 'lucide-react';
+import { Shield, Eye, EyeOff, Lock, Mail, ArrowLeft, Heart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,11 +19,23 @@ const loginSchema = z.object({
 
 type LoginValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get('type');
+
+  const [activeTab, setActiveTab] = useState<'benfeitor' | 'admin'>('benfeitor');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (typeParam === 'admin') {
+      setActiveTab('admin');
+    } else {
+      setActiveTab('benfeitor');
+    }
+  }, [typeParam]);
 
   const {
     register,
@@ -81,14 +93,53 @@ export default function LoginPage() {
           <ArrowLeft className="h-3.5 w-3.5" /> Início
         </Link>
 
-        <div className="text-center pt-4">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-secondary mb-3">
-            <Shield className="h-6 w-6 text-secondary" />
-          </div>
-          <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary dark:text-primary-foreground">
-            Área Restrita
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1 font-semibold uppercase tracking-wider">
+        {/* Abas de Diferenciação */}
+        <div className="flex rounded-lg bg-muted/40 p-1 border border-border/40 mt-4">
+          <button
+            type="button"
+            onClick={() => setActiveTab('benfeitor')}
+            className={`flex-1 py-2 text-xs font-bold rounded-md transition duration-200 cursor-pointer text-center ${
+              activeTab === 'benfeitor'
+                ? 'bg-card text-secondary shadow-xs border border-border/30 font-extrabold'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Sou Benfeitor
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('admin')}
+            className={`flex-1 py-2 text-xs font-bold rounded-md transition duration-200 cursor-pointer text-center ${
+              activeTab === 'admin'
+                ? 'bg-card text-primary shadow-xs border border-border/30 font-extrabold'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Sou Administrador
+          </button>
+        </div>
+
+        <div className="text-center pt-2">
+          {activeTab === 'benfeitor' ? (
+            <>
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-secondary/15 text-secondary mb-3">
+                <Heart className="h-6 w-6 text-secondary fill-current" />
+              </div>
+              <h1 className="font-serif text-2xl md:text-3xl font-bold text-secondary">
+                Área do Benfeitor
+              </h1>
+            </>
+          ) : (
+            <>
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary mb-3">
+                <Shield className="h-6 w-6 text-primary" />
+              </div>
+              <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary">
+                Painel Administrativo
+              </h1>
+            </>
+          )}
+          <p className="text-[10px] text-muted-foreground mt-1.5 font-bold uppercase tracking-wider">
             Igreja Cristo Rei do Universo
           </p>
         </div>
@@ -137,18 +188,40 @@ export default function LoginPage() {
             {errors.password && <span className="text-xs text-red-500 font-semibold">{errors.password.message}</span>}
           </div>
 
-          <Button type="submit" disabled={loading} className="w-full h-11 bg-primary text-secondary hover:bg-secondary hover:text-primary font-bold cursor-pointer transition">
-            {loading ? 'Entrando...' : 'Acessar Painel'}
+          <Button
+            type="submit"
+            disabled={loading}
+            className={`w-full h-11 font-bold cursor-pointer transition ${
+              activeTab === 'benfeitor'
+                ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                : 'bg-primary text-primary-foreground hover:bg-primary/90'
+            }`}
+          >
+            {loading ? 'Entrando...' : activeTab === 'benfeitor' ? 'Entrar como Benfeitor' : 'Entrar como Administrador'}
           </Button>
         </form>
 
-        <div className="text-center text-xs text-muted-foreground font-medium pt-2">
-          Não é um benfeitor cadastrado?{' '}
-          <Link href="/#seja-benfeitor" className="text-secondary hover:underline font-bold cursor-pointer">
-            Seja um Benfeitor
-          </Link>
-        </div>
+        {activeTab === 'benfeitor' ? (
+          <div className="text-center text-xs text-muted-foreground font-medium pt-2">
+            Não é um benfeitor cadastrado?{' '}
+            <Link href="/#seja-benfeitor" className="text-secondary hover:underline font-bold cursor-pointer">
+              Seja um Benfeitor
+            </Link>
+          </div>
+        ) : (
+          <div className="text-center text-xs text-muted-foreground font-semibold italic pt-2">
+            Área de acesso restrito a administradores e editores.
+          </div>
+        )}
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="w-full min-h-[80vh] flex items-center justify-center py-12 px-4">Carregando...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/ImageUpload';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
@@ -179,7 +180,7 @@ export default function PostsAdminPage() {
                   <Label htmlFor="post-category">Categoria do Projeto</Label>
                   <Select
                     value={categoryId}
-                    onValueChange={setCategoryId}
+                    onValueChange={(val) => setCategoryId(val || '')}
                   >
                     <SelectTrigger className="w-full border border-input rounded-lg">
                       <SelectValue placeholder="Selecione o projeto social" />
@@ -219,12 +220,11 @@ export default function PostsAdminPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="post-cover">URL da Imagem Ilustrativa (Opcional)</Label>
-                  <Input
-                    id="post-cover"
+                  <Label>Imagem de Capa / Ilustrativa</Label>
+                  <ImageUpload
                     value={coverImage}
-                    onChange={(e) => setCoverImage(e.target.value)}
-                    placeholder="Ex: /images/news/musica.jpg"
+                    onChange={(url) => setCoverImage(url)}
+                    placeholder="Selecione ou arraste a imagem de capa"
                   />
                 </div>
 
@@ -302,7 +302,7 @@ export default function PostsAdminPage() {
                   <Button
                     type="submit"
                     disabled={isPending}
-                    className={`bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer ${
+                    className={`bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco transition font-bold cursor-pointer ${
                       editingId ? 'w-2/3' : 'w-full'
                     }`}
                   >

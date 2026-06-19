@@ -162,7 +162,7 @@ export default function DoacoesAdminPage() {
                   <Label htmlFor="don-ben">Benfeitor</Label>
                   <Select
                     value={benefactorId}
-                    onValueChange={setBenefactorId}
+                    onValueChange={(val) => setBenefactorId(val || '')}
                   >
                     <SelectTrigger className="w-full border border-input rounded-lg">
                       <SelectValue placeholder="Escolha o benfeitor..." />
@@ -218,7 +218,7 @@ export default function DoacoesAdminPage() {
                   </Select>
                 </div>
 
-                <Button type="submit" disabled={isPending} className="w-full bg-primary text-secondary hover:bg-secondary hover:text-primary transition font-bold cursor-pointer">
+                <Button type="submit" disabled={isPending} className="w-full bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco transition font-bold cursor-pointer">
                   {isPending ? 'Lançando...' : 'Lançar Doação'}
                 </Button>
               </form>

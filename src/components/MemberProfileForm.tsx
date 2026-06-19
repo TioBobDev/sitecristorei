@@ -175,7 +175,7 @@ export function MemberProfileForm({ userId, initialData }: MemberProfileFormProp
       </div>
 
       <div className="pt-4">
-        <Button type="submit" disabled={loading} className="w-full bg-primary text-secondary hover:bg-secondary hover:text-primary font-bold cursor-pointer transition">
+        <Button type="submit" disabled={loading} className="w-full bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold cursor-pointer transition">
           {loading ? 'Salvando...' : 'Salvar Alterações'}
         </Button>
       </div>

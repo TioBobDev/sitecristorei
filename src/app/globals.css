@@ -5,6 +5,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-ouro: #DEA452;
+  --color-ouro-bianco: #FFF3B0;
+  --color-carmo: #540B0E;
+  --color-petala: #9E2A2B;
+  --color-off-royal: #335C67;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -44,66 +49,66 @@
 }
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0b1a30;
+  --background: #FCFAF2; /* Marfim quente baseado no Ouro Bianco */
+  --foreground: #1C1314; /* Grafite quente escuro */
   --card: #ffffff;
-  --card-foreground: #0b1a30;
+  --card-foreground: #1C1314;
   --popover: #ffffff;
-  --popover-foreground: #0b1a30;
-  --primary: #0a192f; /* Azul Marinho Profundo */
-  --primary-foreground: #f8fafc;
-  --secondary: #d4af37; /* Dourado Nobre */
-  --secondary-foreground: #0a192f;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #c5a028; /* Dourado Escuro */
-  --accent-foreground: #f8fafc;
-  --destructive: #ef4444;
+  --popover-foreground: #1C1314;
+  --primary: #540B0E; /* Carmo - Bordô Profundo */
+  --primary-foreground: #FFFBEF;
+  --secondary: #335C67; /* Off Royal - Azul-Petróleo Sóbrio */
+  --secondary-foreground: #FCFAF2;
+  --muted: #F2EDE0; /* Bege-marfim para desabilitados/fundo secundário */
+  --muted-foreground: #635758;
+  --accent: #9E2A2B; /* Pétala - Vermelho Carmim */
+  --accent-foreground: #ffffff;
+  --destructive: #9E2A2B; /* Pétala */
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #cbd5e1;
-  --ring: #d4af37;
+  --border: #E6DCBF; /* Dourado suave para bordas elegantes */
+  --input: #E6DCBF;
+  --ring: #DEA452; /* Ouro */
   --radius: 0.75rem;
 
-  --sidebar: #f8fafc;
-  --sidebar-foreground: #0b1a30;
-  --sidebar-primary: #0a192f;
-  --sidebar-primary-foreground: #f8fafc;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #0a192f;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #d4af37;
+  --sidebar: #FAF6E8;
+  --sidebar-foreground: #1C1314;
+  --sidebar-primary: #540B0E;
+  --sidebar-primary-foreground: #FFF3B0;
+  --sidebar-accent: #F2EDE0;
+  --sidebar-accent-foreground: #540B0E;
+  --sidebar-border: #E6DCBF;
+  --sidebar-ring: #DEA452;
 }
 
 .dark {
-  --background: #060d18;
-  --foreground: #f8fafc;
-  --card: #0a172a;
-  --card-foreground: #f8fafc;
-  --popover: #0a172a;
-  --popover-foreground: #f8fafc;
-  --primary: #d4af37; /* Dourado principal no escuro */
-  --primary-foreground: #060d18;
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #b59410;
-  --accent-foreground: #060d18;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #1e293b;
-  --input: #334155;
-  --ring: #d4af37;
+  --background: #132226; /* Azul-petróleo escuro baseado no Off Royal */
+  --foreground: #FFFBEF;
+  --card: #1A2E33; /* Tom levemente mais claro de azul-petróleo */
+  --card-foreground: #FFFBEF;
+  --popover: #1A2E33;
+  --popover-foreground: #FFFBEF;
+  --primary: #DEA452; /* Ouro - Destaque Principal */
+  --primary-foreground: #132226;
+  --secondary: #FFF3B0; /* Ouro Bianco - Destaque Secundário */
+  --secondary-foreground: #132226;
+  --muted: #1D2F33;
+  --muted-foreground: #8FA3A6;
+  --accent: #9E2A2B; /* Pétala */
+  --accent-foreground: #FFFBEF;
+  --destructive: #9E2A2B;
+  --destructive-foreground: #FFFBEF;
+  --border: #2A3F44;
+  --input: #2A3F44;
+  --ring: #DEA452;
 
-  --sidebar: #0a172a;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #d4af37;
-  --sidebar-primary-foreground: #060d18;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #d4af37;
+  --sidebar: #132226;
+  --sidebar-foreground: #FFFBEF;
+  --sidebar-primary: #DEA452;
+  --sidebar-primary-foreground: #132226;
+  --sidebar-accent: #1A2E33;
+  --sidebar-accent-foreground: #FFFBEF;
+  --sidebar-border: #2A3F44;
+  --sidebar-ring: #DEA452;
 }
 
 @layer base {

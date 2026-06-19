@@ -1,11 +1,24 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Heart } from 'lucide-react';
-import { getSiteSettings } from '@/services/actions/site.actions';
+import { ClientImage } from './ClientImage';
 
-export async function Footer() {
-  const settings = await getSiteSettings();
+interface FooterProps {
+  siteSettings: any;
+}
+
+export function Footer({ siteSettings }: FooterProps) {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  const isPanelPath = pathname.startsWith('/admin') || pathname.startsWith('/associado');
+
+  if (isPanelPath) {
+    return null;
+  }
 
   return (
     <footer className="w-full bg-primary text-primary-foreground border-t border-secondary/20 pt-16 pb-8">
@@ -13,14 +26,12 @@ export async function Footer() {
         {/* Coluna 1: Institucional */}
         <div className="flex flex-col gap-4">
           <Link href="/" className="flex items-center gap-3">
-            {settings?.logoUrl ? (
-              <img
-                src={settings.logoUrl}
+            {siteSettings?.logoUrl ? (
+              <ClientImage
+                src={siteSettings.logoUrl}
                 alt="Logo"
                 className="h-10 w-10 rounded-full border border-secondary object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/logo.png';
-                }}
+                fallbackSrc="/images/logo.png"
               />
             ) : (
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary font-bold">
@@ -36,9 +47,9 @@ export async function Footer() {
           </p>
           {/* Redes Sociais */}
           <div className="flex gap-4 mt-2">
-            {settings?.facebook && (
+            {siteSettings?.facebook && (
               <a
-                href={settings.facebook}
+                href={siteSettings.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-primary transition"
@@ -46,9 +57,9 @@ export async function Footer() {
                 <Facebook className="h-5 w-5" />
               </a>
             )}
-            {settings?.instagram && (
+            {siteSettings?.instagram && (
               <a
-                href={settings.instagram}
+                href={siteSettings.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-primary transition"
@@ -56,9 +67,9 @@ export async function Footer() {
                 <Instagram className="h-5 w-5" />
               </a>
             )}
-            {settings?.youtube && (
+            {siteSettings?.youtube && (
               <a
-                href={settings.youtube}
+                href={siteSettings.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-primary transition"
@@ -109,22 +120,22 @@ export async function Footer() {
         <div className="flex flex-col gap-4">
           <h4 className="font-serif text-base font-bold uppercase tracking-wider text-secondary">Contato</h4>
           <ul className="flex flex-col gap-3 text-sm text-primary-foreground/80 font-medium">
-            {settings?.address && (
+            {siteSettings?.address && (
               <li className="flex items-start gap-2.5">
                 <MapPin className="h-5 w-5 text-secondary shrink-0 mt-0.5" />
-                <span>{settings.address}</span>
+                <span>{siteSettings.address}</span>
               </li>
             )}
-            {settings?.phone && (
+            {siteSettings?.phone && (
               <li className="flex items-center gap-2.5">
                 <Phone className="h-5 w-5 text-secondary shrink-0" />
-                <span>{settings.phone}</span>
+                <span>{siteSettings.phone}</span>
               </li>
             )}
-            {settings?.email && (
+            {siteSettings?.email && (
               <li className="flex items-center gap-2.5">
                 <Mail className="h-5 w-5 text-secondary shrink-0" />
-                <span className="truncate">{settings.email}</span>
+                <span className="truncate">{siteSettings.email}</span>
               </li>
             )}
           </ul>
@@ -132,7 +143,7 @@ export async function Footer() {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 pt-8 border-t border-secondary/10 text-center text-xs text-primary-foreground/60 font-medium">
-        <p>© {currentYear} {settings?.name || 'Associação Cristo Rei do Universo'}. Todos os direitos reservados.</p>
+        <p>© 2026 Associação Cristo Rei do Universo. Todos os direitos reservados.</p>
         <p className="mt-1">Desenvolvido com fé e dedicação social.</p>
       </div>
     </footer>

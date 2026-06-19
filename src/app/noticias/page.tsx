@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Calendar, User } from 'lucide-react';
 import { getNewsList } from '@/services/actions/site.actions';
+import { ClientImage } from '@/components/ClientImage';
 
 export const revalidate = 60; // Revalida a cada minuto
 
@@ -29,13 +30,11 @@ export default async function NoticiasPage() {
           <div className="group relative rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12">
             <div className="lg:col-span-7 aspect-video lg:aspect-auto min-h-[300px] overflow-hidden bg-muted relative">
               {newsList[0].coverImage ? (
-                <img
+                <ClientImage
                   src={newsList[0].coverImage}
                   alt={newsList[0].title}
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/images/logo.png';
-                  }}
+                  fallbackSrc="/images/logo.png"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-2xl font-bold">
@@ -70,7 +69,7 @@ export default async function NoticiasPage() {
               <div>
                 <Link
                   href={`/noticias/${newsList[0].id}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-secondary hover:bg-secondary hover:text-primary font-bold text-sm transition cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold text-sm transition cursor-pointer"
                 >
                   Ler Notícia Completa <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -95,13 +94,11 @@ export default async function NoticiasPage() {
               >
                 <div className="aspect-video w-full overflow-hidden bg-muted relative">
                   {news.coverImage ? (
-                    <img
+                    <ClientImage
                       src={news.coverImage}
                       alt={news.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/images/logo.png';
-                      }}
+                      fallbackSrc="/images/logo.png"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-lg font-bold">

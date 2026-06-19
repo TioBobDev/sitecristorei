@@ -25,6 +25,9 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [donationOpen, setDonationOpen] = useState(false);
 
+  const isPanelPath = pathname.startsWith('/admin') || pathname.startsWith('/associado');
+  if (isPanelPath) return null;
+
   const isLoggedIn = !!session?.user;
   const userRole = session?.user?.role;
   const userName = session?.user?.name || 'Associado';
@@ -94,17 +97,21 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                   <div className="px-3 py-2 text-xs text-muted-foreground">Nenhum projeto registrado</div>
                 ) : (
                   categories.map((cat) => (
-                    <DropdownMenuItem key={cat.id} asChild className="hover:bg-primary/5 cursor-pointer">
-                      <Link
-                        href={`/projetos/${cat.slug}`}
-                        className={`w-full block px-3 py-2 text-sm rounded-md transition ${
-                          pathname === `/projetos/${cat.slug}`
-                            ? 'text-secondary font-bold'
-                            : 'text-foreground/80'
-                        }`}
-                      >
-                        {cat.name}
-                      </Link>
+                    <DropdownMenuItem
+                      key={cat.id}
+                      render={
+                        <Link
+                          href={`/projetos/${cat.slug}`}
+                          className={`w-full block px-3 py-2 text-sm rounded-md transition ${
+                            pathname === `/projetos/${cat.slug}`
+                              ? 'text-secondary font-bold'
+                              : 'text-foreground/80'
+                          }`}
+                        />
+                      }
+                      className="hover:bg-primary/5 cursor-pointer"
+                    >
+                      {cat.name}
                     </DropdownMenuItem>
                   ))
                 )}
@@ -133,7 +140,7 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
               variant="outline"
               size="sm"
               onClick={() => setDonationOpen(true)}
-              className="gap-2 border-secondary text-secondary hover:bg-secondary hover:text-primary transition font-semibold cursor-pointer"
+              className="gap-2 border-secondary text-secondary hover:bg-secondary hover:text-ouro-bianco transition font-semibold cursor-pointer"
             >
               <Heart className="h-4 w-4 fill-current" />
               Quero ser um Benfeitor
@@ -141,25 +148,25 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
 
             {isLoggedIn ? (
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center gap-2 font-medium border border-border/50 rounded-full cursor-pointer">
-                    <User className="h-4 w-4 text-secondary" />
-                    <span className="max-w-[100px] truncate">{userName}</span>
-                  </Button>
+                <DropdownMenuTrigger render={
+                  <Button variant="ghost" className="flex items-center gap-2 font-medium border border-border/50 rounded-full cursor-pointer" />
+                }>
+                  <User className="h-4 w-4 text-secondary" />
+                  <span className="max-w-[100px] truncate">{userName}</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-52 glass rounded-xl border border-border">
                   {(userRole === 'ADMIN' || userRole === 'EDITOR') && (
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link href="/admin/dashboard" className="flex items-center gap-2 px-3 py-2 text-sm">
-                        <LayoutDashboard className="h-4 w-4" /> Painel Admin
-                      </Link>
+                    <DropdownMenuItem render={
+                      <Link href="/admin/dashboard" className="flex items-center gap-2 px-3 py-2 text-sm" />
+                    } className="cursor-pointer">
+                      <LayoutDashboard className="h-4 w-4" /> Painel Admin
                     </DropdownMenuItem>
                   )}
                   {userRole === 'BENEFACTOR' && (
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link href="/associado/dashboard" className="flex items-center gap-2 px-3 py-2 text-sm">
-                        <LayoutDashboard className="h-4 w-4" /> Área do Benfeitor
-                      </Link>
+                    <DropdownMenuItem render={
+                      <Link href="/associado/dashboard" className="flex items-center gap-2 px-3 py-2 text-sm" />
+                    } className="cursor-pointer">
+                      <LayoutDashboard className="h-4 w-4" /> Área do Benfeitor
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem onClick={handleLogout} className="text-red-500 hover:text-red-600 focus:text-red-500 cursor-pointer">
@@ -170,10 +177,8 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild variant="ghost" size="sm" className="gap-2 text-primary dark:text-primary-foreground hover:text-secondary cursor-pointer">
-                <Link href="/login">
-                  <Shield className="h-4 w-4" /> Área do Associado
-                </Link>
+              <Button render={<Link href="/login" />} variant="ghost" size="sm" className="gap-2 text-primary dark:text-primary-foreground hover:text-secondary cursor-pointer">
+                <Shield className="h-4 w-4" /> Área do Associado
               </Button>
             )}
           </div>
@@ -184,7 +189,7 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
               variant="outline"
               size="icon"
               onClick={() => setDonationOpen(true)}
-              className="border-secondary text-secondary hover:bg-secondary hover:text-primary cursor-pointer"
+              className="border-secondary text-secondary hover:bg-secondary hover:text-ouro-bianco cursor-pointer"
             >
               <Heart className="h-4 w-4 fill-current" />
             </Button>
@@ -266,17 +271,13 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                     <span className="font-semibold truncate">{userName} ({userRole})</span>
                   </div>
                   {(userRole === 'ADMIN' || userRole === 'EDITOR') && (
-                    <Button asChild size="sm" variant="outline" className="w-full justify-start cursor-pointer">
-                      <Link href="/admin/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                        <LayoutDashboard className="h-4 w-4 mr-2" /> Painel Admin
-                      </Link>
+                    <Button render={<Link href="/admin/dashboard" onClick={() => setMobileMenuOpen(false)} />} size="sm" variant="outline" className="w-full justify-start cursor-pointer">
+                      <LayoutDashboard className="h-4 w-4 mr-2" /> Painel Admin
                     </Button>
                   )}
                   {userRole === 'BENEFACTOR' && (
-                    <Button asChild size="sm" variant="outline" className="w-full justify-start cursor-pointer">
-                      <Link href="/associado/dashboard" onClick={() => setMobileMenuOpen(false)}>
-                        <LayoutDashboard className="h-4 w-4 mr-2" /> Área do Benfeitor
-                      </Link>
+                    <Button render={<Link href="/associado/dashboard" onClick={() => setMobileMenuOpen(false)} />} size="sm" variant="outline" className="w-full justify-start cursor-pointer">
+                      <LayoutDashboard className="h-4 w-4 mr-2" /> Área do Benfeitor
                     </Button>
                   )}
                   <Button
@@ -292,10 +293,8 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                   </Button>
                 </div>
               ) : (
-                <Button asChild variant="outline" className="w-full justify-center border-primary text-primary dark:text-primary-foreground dark:border-border cursor-pointer">
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Shield className="h-4 w-4 mr-2" /> Área do Associado
-                  </Link>
+                <Button render={<Link href="/login" onClick={() => setMobileMenuOpen(false)} />} variant="outline" className="w-full justify-center border-primary text-primary dark:text-primary-foreground dark:border-border cursor-pointer">
+                  <Shield className="h-4 w-4 mr-2" /> Área do Associado
                 </Button>
               )}
             </div>
