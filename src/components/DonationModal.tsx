@@ -219,26 +219,6 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               ))}
             </div>
 
-            {/* Descrição da patente selecionada */}
-            <div className="p-4 rounded-xl bg-primary/5 dark:bg-primary/10 border border-secondary/25">
-              <h4 className="font-serif font-bold text-primary dark:text-primary-foreground flex items-center gap-2">
-                <Shield className="h-5 w-5 text-secondary" />
-                Patente: {selectedRank.name} — R$ {selectedRank.value.toFixed(2)} / mês
-              </h4>
-              <p className="text-sm text-muted-foreground mt-1 font-medium">{selectedRank.desc}</p>
-              <div className="mt-3">
-                <span className="text-xs font-semibold uppercase tracking-widest text-secondary">Benefícios:</span>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 mt-1">
-                  {selectedRank.benefits.map((b, idx) => (
-                    <li key={idx} className="text-xs text-foreground/85 flex items-center gap-1.5 font-medium">
-                      <Check className="h-3.5 w-3.5 text-secondary shrink-0" />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
             <Button onClick={handleNextStep} className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition">
               Avançar para o Cadastro <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
@@ -274,7 +254,26 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
 
               <div className="space-y-1.5">
                 <Label htmlFor="cpf">CPF</Label>
-                <Input id="cpf" placeholder="000.000.000-00" {...register('cpf')} />
+                <Input
+                  id="cpf"
+                  placeholder="000.000.000-00"
+                  {...register('cpf', {
+                    onChange: (e) => {
+                      const clean = e.target.value.replace(/\D/g, '').slice(0, 11);
+                      let formatted = clean;
+                      if (clean.length > 3) {
+                        formatted = `${clean.slice(0, 3)}.${clean.slice(3)}`;
+                      }
+                      if (clean.length > 6) {
+                        formatted = `${clean.slice(0, 3)}.${clean.slice(3, 6)}.${clean.slice(6)}`;
+                      }
+                      if (clean.length > 9) {
+                        formatted = `${clean.slice(0, 3)}.${clean.slice(3, 6)}.${clean.slice(6, 9)}-${clean.slice(9)}`;
+                      }
+                      e.target.value = formatted;
+                    }
+                  })}
+                />
                 {errors.cpf && <span className="text-xs text-red-500 font-semibold">{errors.cpf.message}</span>}
               </div>
 
@@ -286,7 +285,29 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
 
               <div className="space-y-1.5">
                 <Label htmlFor="phone">Telefone / WhatsApp</Label>
-                <Input id="phone" placeholder="(00) 90000-0000" {...register('phone')} />
+                <Input
+                  id="phone"
+                  placeholder="(00) 90000-0000"
+                  {...register('phone', {
+                    onChange: (e) => {
+                      const clean = e.target.value.replace(/\D/g, '').slice(0, 11);
+                      let formatted = clean;
+                      if (clean.length > 0) {
+                        const ddd = clean.slice(0, 2);
+                        if (clean.length <= 2) {
+                          formatted = `(${ddd}`;
+                        } else if (clean.length <= 6) {
+                          formatted = `(${ddd}) ${clean.slice(2)}`;
+                        } else if (clean.length <= 10) {
+                          formatted = `(${ddd}) ${clean.slice(2, 6)}-${clean.slice(6)}`;
+                        } else {
+                          formatted = `(${ddd}) ${clean.slice(2, 7)}-${clean.slice(7)}`;
+                        }
+                      }
+                      e.target.value = formatted;
+                    }
+                  })}
+                />
                 {errors.phone && <span className="text-xs text-red-500 font-semibold">{errors.phone.message}</span>}
               </div>
 

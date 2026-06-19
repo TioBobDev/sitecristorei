@@ -128,7 +128,29 @@ export function MemberProfileForm({ userId, initialData }: MemberProfileFormProp
         {/* Telefone */}
         <div className="space-y-1.5">
           <Label htmlFor="perf-phone">Telefone / WhatsApp</Label>
-          <Input id="perf-phone" {...register('phone')} />
+          <Input
+            id="perf-phone"
+            placeholder="(00) 90000-0000"
+            {...register('phone', {
+              onChange: (e) => {
+                const clean = e.target.value.replace(/\D/g, '').slice(0, 11);
+                let formatted = clean;
+                if (clean.length > 0) {
+                  const ddd = clean.slice(0, 2);
+                  if (clean.length <= 2) {
+                    formatted = `(${ddd}`;
+                  } else if (clean.length <= 6) {
+                    formatted = `(${ddd}) ${clean.slice(2)}`;
+                  } else if (clean.length <= 10) {
+                    formatted = `(${ddd}) ${clean.slice(2, 6)}-${clean.slice(6)}`;
+                  } else {
+                    formatted = `(${ddd}) ${clean.slice(2, 7)}-${clean.slice(7)}`;
+                  }
+                }
+                e.target.value = formatted;
+              }
+            })}
+          />
           {errors.phone && <span className="text-xs text-red-500 font-semibold">{errors.phone.message}</span>}
         </div>
 
