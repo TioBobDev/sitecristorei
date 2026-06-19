@@ -390,3 +390,18 @@ export async function updateSiteSettings(
   await logAction(adminId, 'ATUALIZAR_CONFIGURACOES', `Atualizou configurações institucionais`);
   return { success: true, data: settings };
 }
+
+// 6. Logs de Auditoria
+export async function getAdminLogs() {
+  try {
+    return await prisma.adminLog.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 100, // Limitar aos últimos 100 logs para fins de performance
+      include: { user: { select: { name: true } } },
+    });
+  } catch (error) {
+    console.error('Erro ao buscar logs administrativos:', error);
+    return [];
+  }
+}
+

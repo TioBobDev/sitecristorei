@@ -1,7 +1,7 @@
 import React from 'react';
 import { getAdminDashboardData } from '@/services/actions/admin.actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, DollarSign, FileText, PenTool, ClipboardList } from 'lucide-react';
+import { Users, DollarSign, FileText, PenTool } from 'lucide-react';
 import { auth } from '@/auth';
 
 export default async function AdminDashboardPage() {
@@ -73,53 +73,6 @@ export default async function AdminDashboardPage() {
             </p>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Logs de Auditoria Administrativa */}
-      <div className="space-y-4">
-        <h2 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground flex items-center gap-2">
-          <ClipboardList className="h-5 w-5 text-secondary" />
-          Logs de Auditoria Recentes
-        </h2>
-
-        <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-          <table className="w-full text-left border-collapse text-xs md:text-sm">
-            <thead>
-              <tr className="bg-muted/40 border-b border-border">
-                <th className="p-3 font-bold text-primary dark:text-primary-foreground">Data</th>
-                <th className="p-3 font-bold text-primary dark:text-primary-foreground">Usuário</th>
-                <th className="p-3 font-bold text-primary dark:text-primary-foreground">Ação</th>
-                <th className="p-3 font-bold text-primary dark:text-primary-foreground">Detalhes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.recentLogs.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="p-6 text-center text-muted-foreground font-medium">
-                    Nenhuma ação registrada nos logs de auditoria.
-                  </td>
-                </tr>
-              ) : (
-                data.recentLogs.map((log) => (
-                  <tr key={log.id} className="border-b border-border hover:bg-muted/10 transition">
-                    <td className="p-3 font-medium whitespace-nowrap">
-                      {new Date(log.createdAt).toLocaleString('pt-BR')}
-                    </td>
-                    <td className="p-3 font-bold text-primary dark:text-primary-foreground whitespace-nowrap">
-                      {log.user.name}
-                    </td>
-                    <td className="p-3 whitespace-nowrap">
-                      <span className="inline-block px-2 py-0.5 bg-secondary/15 text-secondary border border-secondary/20 text-[9px] font-bold rounded">
-                        {log.action}
-                      </span>
-                    </td>
-                    <td className="p-3 text-muted-foreground font-medium">{log.details || '-'}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   );

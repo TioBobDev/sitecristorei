@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
+import { auth, signOut } from '@/auth';
 import {
   LayoutDashboard,
   FileText,
@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
   Home,
+  ClipboardList,
 } from 'lucide-react';
 
 export default async function AdminLayout({
@@ -120,10 +121,10 @@ export default async function AdminLayout({
             </Link>
 
             <Link
-              href="/"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition mt-6"
+              href="/admin/logs"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
             >
-              <Home className="h-4 w-4 text-secondary shrink-0" /> Voltar ao Site
+              <ClipboardList className="h-4 w-4 text-secondary shrink-0" /> Logs de Auditoria
             </Link>
           </nav>
         </div>
@@ -131,8 +132,33 @@ export default async function AdminLayout({
 
       {/* Área do Painel */}
       <main className="flex-1 p-6 md:p-10 max-h-screen overflow-y-auto flex flex-col justify-between">
-        <div className="container mx-auto space-y-8 flex-1">
-          {children}
+        <div className="container mx-auto space-y-6 flex-1 flex flex-col">
+          {/* Top Bar */}
+          <div className="flex justify-end items-center gap-3 pb-4 border-b border-border shrink-0">
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold border border-border rounded-lg bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition cursor-pointer"
+            >
+              <Home className="h-3.5 w-3.5" /> Voltar ao Site
+            </Link>
+            <form
+              action={async () => {
+                'use server';
+                await signOut({ redirectTo: '/' });
+              }}
+            >
+              <button
+                type="submit"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold bg-destructive/10 text-destructive border border-destructive/20 rounded-lg hover:bg-destructive hover:text-white transition cursor-pointer"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Sair
+              </button>
+            </form>
+          </div>
+
+          <div className="flex-1 pt-4">
+            {children}
+          </div>
         </div>
         <footer className="mt-8 pt-6 border-t border-border text-center text-xs text-muted-foreground/75 shrink-0">
           <p>© 2026 Associação Cristo Rei do Universo. Todos os direitos reservados.</p>
