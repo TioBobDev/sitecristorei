@@ -42,14 +42,14 @@ export default async function AdminLayout({
           <div>
             <Link href="/" className="flex items-center mb-4 hover:opacity-90">
               <img
-                src="/images/logo.png"
+                src="/images/logo_painel.png"
                 alt="Logo Cristo Rei"
                 className="h-8 w-auto object-contain"
               />
             </Link>
             <div className="text-[10px] text-primary-foreground/60 uppercase font-bold tracking-wider">Perfil ativo</div>
-            <div className="text-sm font-bold text-secondary truncate mt-0.5">{session.user?.name}</div>
-            <span className="inline-block px-2 py-0.5 bg-secondary/20 text-secondary text-[9px] font-bold rounded uppercase tracking-wider mt-1.5 border border-secondary/35">
+            <div className="text-sm font-bold text-ouro truncate mt-0.5">{session.user?.name}</div>
+            <span className="inline-block px-2 py-0.5 bg-ouro/20 text-ouro text-[9px] font-bold rounded uppercase tracking-wider mt-1.5 border border-ouro/35">
               {roleName}
             </span>
           </div>
@@ -57,9 +57,9 @@ export default async function AdminLayout({
           <nav className="flex flex-col gap-1 overflow-y-auto max-h-[70vh] scrollbar-thin">
             <Link
               href="/admin/dashboard"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <LayoutDashboard className="h-4 w-4 text-secondary shrink-0" /> Dashboard
+              <LayoutDashboard className="h-4 w-4 text-ouro shrink-0" /> Dashboard
             </Link>
 
             <div className="my-2 border-t border-white/10" />
@@ -67,33 +67,33 @@ export default async function AdminLayout({
 
             <Link
               href="/admin/noticias"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <FileText className="h-4 w-4 text-secondary shrink-0" /> Notícias
+              <FileText className="h-4 w-4 text-ouro shrink-0" /> Notícias
             </Link>
             <Link
               href="/admin/categorias"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <FolderTree className="h-4 w-4 text-secondary shrink-0" /> Categorias
+              <FolderTree className="h-4 w-4 text-ouro shrink-0" /> Categorias
             </Link>
             <Link
               href="/admin/posts"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <PenTool className="h-4 w-4 text-secondary shrink-0" /> Posts de Projetos
+              <PenTool className="h-4 w-4 text-ouro shrink-0" /> Posts de Projetos
             </Link>
             <Link
               href="/admin/carrossel"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <ImageIcon className="h-4 w-4 text-secondary shrink-0" /> Carrossel Inicial
+              <ImageIcon className="h-4 w-4 text-ouro shrink-0" /> Carrossel Inicial
             </Link>
             <Link
               href="/admin/comunicados"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <Megaphone className="h-4 w-4 text-secondary shrink-0" /> Comunicados
+              <Megaphone className="h-4 w-4 text-ouro shrink-0" /> Comunicados
             </Link>
 
             <div className="my-2 border-t border-white/10" />
@@ -101,15 +101,15 @@ export default async function AdminLayout({
 
             <Link
               href="/admin/benfeitores"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <Users className="h-4 w-4 text-secondary shrink-0" /> Benfeitores
+              <Users className="h-4 w-4 text-ouro shrink-0" /> Benfeitores
             </Link>
             <Link
               href="/admin/doacoes"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <DollarSign className="h-4 w-4 text-secondary shrink-0" /> Doações
+              <DollarSign className="h-4 w-4 text-ouro shrink-0" /> Doações
             </Link>
 
             <div className="my-2 border-t border-white/10" />
@@ -117,16 +117,16 @@ export default async function AdminLayout({
 
             <Link
               href="/admin/configuracoes"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <Settings className="h-4 w-4 text-secondary shrink-0" /> Configurações
+              <Settings className="h-4 w-4 text-ouro shrink-0" /> Configurações
             </Link>
 
             <Link
               href="/admin/logs"
-              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-secondary hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
             >
-              <ClipboardList className="h-4 w-4 text-secondary shrink-0" /> Logs de Auditoria
+              <ClipboardList className="h-4 w-4 text-ouro shrink-0" /> Logs de Auditoria
             </Link>
           </nav>
         </div>
