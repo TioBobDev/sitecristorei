@@ -18,22 +18,22 @@ export default async function HomePage() {
   const categories = await getCategories();
 
   // Mapeia ícones para os projetos sociais com base no slug
-  const getIcon = (slug: string) => {
+  const getIcon = (slug: string, className: string = "h-8 w-8 text-secondary") => {
     switch (slug) {
       case 'reforco-pedagogico':
-        return <BookOpen className="h-8 w-8 text-secondary" />;
+        return <BookOpen className={className} />;
       case 'aula-de-musica':
-        return <Music className="h-8 w-8 text-secondary" />;
+        return <Music className={className} />;
       case 'aula-de-informatica':
-        return <Award className="h-8 w-8 text-secondary" />;
+        return <Award className={className} />;
       case 'pilates':
-        return <Activity className="h-8 w-8 text-secondary" />;
+        return <Activity className={className} />;
       case 'festa-junina':
-        return <Calendar className="h-8 w-8 text-secondary" />;
+        return <Calendar className={className} />;
       case 'noite-cultural':
-        return <FileText className="h-8 w-8 text-secondary" />;
+        return <FileText className={className} />;
       default:
-        return <Award className="h-8 w-8 text-secondary" />;
+        return <Award className={className} />;
     }
   };
 
@@ -86,8 +86,8 @@ export default async function HomePage() {
                   className="group relative flex flex-col justify-between p-6 rounded-2xl border border-border bg-card shadow-sm hover:shadow-xl hover:border-secondary/40 transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="space-y-4">
-                    <div className="h-14 w-14 rounded-2xl bg-primary/5 dark:bg-primary/20 flex items-center justify-center transition-colors group-hover:bg-primary group-hover:text-secondary">
-                      {getIcon(cat.slug)}
+                    <div className="h-14 w-14 rounded-2xl bg-primary/5 dark:bg-primary/20 flex items-center justify-center transition-colors duration-300 group-hover:bg-primary">
+                      {getIcon(cat.slug, "h-8 w-8 text-secondary group-hover:text-primary-foreground transition-colors duration-300")}
                     </div>
                     <h3 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground">
                       {cat.name}

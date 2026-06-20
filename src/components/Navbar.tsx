@@ -48,7 +48,7 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
               <img
                 src={siteSettings.logoUrl}
                 alt="Logo"
-                className="h-12 w-12 rounded-full border border-secondary object-cover"
+                className="h-12 w-auto object-contain"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/images/logo.png';
                 }}
@@ -58,14 +58,6 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                 CR
               </div>
             )}
-            <div className="flex flex-col">
-              <span className="font-serif text-lg font-bold tracking-tight text-primary dark:text-primary-foreground md:text-xl">
-                Cristo Rei
-              </span>
-              <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">
-                Exército de Cristo
-              </span>
-            </div>
           </Link>
 
           {/* Menu Desktop */}

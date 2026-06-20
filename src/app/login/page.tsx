@@ -93,8 +93,19 @@ function LoginContent() {
           <ArrowLeft className="h-3.5 w-3.5" /> Início
         </Link>
 
+        {/* Logo da Instituição */}
+        <div className="flex flex-col items-center pt-4">
+          <Link href="/" className="transition hover:opacity-90">
+            <img
+              src="/images/logo.png"
+              alt="Logo Cristo Rei"
+              className="h-16 w-auto object-contain"
+            />
+          </Link>
+        </div>
+
         {/* Abas de Diferenciação */}
-        <div className="flex rounded-lg bg-muted/40 p-1 border border-border/40 mt-4">
+        <div className="flex rounded-lg bg-muted/40 p-1 border border-border/40 mt-2">
           <button
             type="button"
             onClick={() => setActiveTab('benfeitor')}

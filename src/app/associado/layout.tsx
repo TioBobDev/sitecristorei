@@ -23,10 +23,19 @@ export default async function AssociadoLayout({
       {/* Sidebar de Navegação */}
       <aside className="w-full lg:w-64 border-r border-border bg-card p-6 lg:min-h-[80vh] shrink-0">
         <div className="flex flex-col gap-6">
-          <div>
-            <div className="text-xs text-muted-foreground uppercase font-bold tracking-wider">Painel do Benfeitor</div>
-            <div className="text-sm font-bold text-primary dark:text-primary-foreground mt-0.5 truncate">{userName}</div>
-            <div className="text-[10px] text-secondary font-semibold uppercase tracking-widest mt-1">Exército de Cristo</div>
+          <div className="flex flex-col gap-3">
+            <Link href="/" className="flex items-center hover:opacity-90 transition">
+              <img
+                src="/images/logo.png"
+                alt="Logo Cristo Rei"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
+            <div>
+              <div className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Painel do Benfeitor</div>
+              <div className="text-sm font-bold text-primary dark:text-primary-foreground mt-0.5 truncate">{userName}</div>
+              <div className="text-[9px] text-secondary font-bold uppercase tracking-widest mt-1">Exército de Cristo</div>
+            </div>
           </div>
           
           <nav className="flex flex-row lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 scrollbar-none border-b border-border lg:border-b-0">

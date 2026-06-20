@@ -40,10 +40,12 @@ export default async function AdminLayout({
       <aside className="w-full lg:w-64 border-r border-border bg-primary text-primary-foreground p-6 shrink-0 lg:min-h-screen">
         <div className="flex flex-col gap-6">
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-4 hover:opacity-90">
-              <span className="font-serif text-lg font-bold text-secondary">
-                Cristo Rei Admin
-              </span>
+            <Link href="/" className="flex items-center mb-4 hover:opacity-90">
+              <img
+                src="/images/logo.png"
+                alt="Logo Cristo Rei"
+                className="h-8 w-auto object-contain"
+              />
             </Link>
             <div className="text-[10px] text-primary-foreground/60 uppercase font-bold tracking-wider">Perfil ativo</div>
             <div className="text-sm font-bold text-secondary truncate mt-0.5">{session.user?.name}</div>
