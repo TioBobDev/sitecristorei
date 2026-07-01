@@ -66,9 +66,6 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
             index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          {/* Overlay Escuro para Legibilidade */}
-          <div className="absolute inset-0 bg-black/60 z-10" />
-
           {/* Imagem de Fundo */}
           <img
             src={slide.imageUrl}
@@ -80,7 +77,7 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
           />
 
           {/* Conteúdo do Slide */}
-          <div className="absolute inset-0 z-25 flex items-center justify-center p-6 text-center">
+          <div className="absolute inset-0 z-25 flex items-end justify-center pb-16 p-6 text-center">
             <div className="max-w-3xl text-primary-foreground space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-700">
               {slide.title && (
                 <h2 className="font-serif text-3xl md:text-5xl font-bold text-ouro-bianco tracking-tight">
