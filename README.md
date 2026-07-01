@@ -83,19 +83,5 @@ npm run dev
 ```
 Acesse a aplicação em [http://localhost:3000](http://localhost:3000).
 
----
 
-## 🔑 Credenciais Iniciais para Testes
 
-O seed criará dois usuários de controle padrão para testes de perfil:
-
-- **Usuário Administrador (Acesso Total):**
-  - **E-mail:** `admin@cristorei.org`
-  - **Senha:** `Admin@123456`
-
-- **Usuário Editor (Gestão de Conteúdo):**
-  - **E-mail:** `editor@cristorei.org`
-  - **Senha:** `Editor@123456`
-
-- **Usuário Benfeitor:**
-  Cadastre-se na home page através do botão **"Quero ser um Benfeitor"** (seja alistando-se como Coronel, Major, Tenente, etc.). Após a simulação de cadastro e PIX, você poderá logar no painel com o e-mail e a senha informados.
