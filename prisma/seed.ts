@@ -79,17 +79,24 @@ async function main() {
     });
     console.log(`Categoria criada: ${category.name} (/projetos/${category.slug})`);
 
-    // Criar um projeto exemplo em cada categoria
-    await prisma.project.create({
-      data: {
-        name: `Projeto ${cat.name}`,
-        slug: `projeto-${cat.slug}`,
-        summary: `Conheça o trabalho que realizamos no projeto de ${cat.name}.`,
-        description: `O projeto de ${cat.name} foi criado para promover transformação social através do desenvolvimento de habilidades e integração da comunidade. Nossas ações contam com profissionais voluntários e doações da comunidade para prover o melhor acolhimento e ensino.`,
-        bannerUrl: `/images/categories/${cat.slug}.jpg`,
-        categoryId: category.id,
-      },
+    // Criar um projeto exemplo em cada categoria se ele não existir
+    const projectSlug = `projeto-${cat.slug}`;
+    const projectExists = await prisma.project.findUnique({
+      where: { slug: projectSlug }
     });
+
+    if (!projectExists) {
+      await prisma.project.create({
+        data: {
+          name: `Projeto ${cat.name}`,
+          slug: projectSlug,
+          summary: `Conheça o trabalho que realizamos no projeto de ${cat.name}.`,
+          description: `O projeto de ${cat.name} foi criado para promover transformação social através do desenvolvimento de habilidades e integração da comunidade. Nossas ações contam com profissionais voluntários e doações da comunidade para prover o melhor acolhimento e ensino.`,
+          bannerUrl: `/images/categories/${cat.slug}.jpg`,
+          categoryId: category.id,
+        },
+      });
+    }
   }
 
   // 4. Criar Imagens de Carrossel Iniciais
@@ -110,48 +117,63 @@ async function main() {
     },
   ];
 
-  for (const img of carouselImages) {
-    await prisma.carouselImage.create({
-      data: img,
-    });
+  const carouselCount = await prisma.carouselImage.count();
+  if (carouselCount === 0) {
+    for (const img of carouselImages) {
+      await prisma.carouselImage.create({
+        data: img,
+      });
+    }
+    console.log('Imagens do carrossel inicial criadas.');
+  } else {
+    console.log('Imagens do carrossel já existem.');
   }
-  console.log('Imagens do carrossel inicial criadas.');
 
   // 5. Criar Notícias Iniciais
-  await prisma.news.create({
-    data: {
-      title: 'Inauguração das Novas Salas de Informática',
-      subtitle: 'Comunidade ganha computadores novos e cursos gratuitos',
-      summary: 'Graças às contribuições de nossos coroneis e tenentes do Exército de Cristo Rei, inauguramos hoje a nova sala de computadores.',
-      content: '<p>A Associação Cristo Rei do Universo tem a alegria de informar que a nova sala de aula digital foi inaugurada. Equipados com computadores modernos, iniciaremos as novas turmas de informática básica e desenvolvimento web para jovens na próxima segunda-feira.</p><p>Agradecemos a todos os benfeitores que tornaram esse sonho possível através de suas generosas doações mensais via PIX.</p>',
-      coverImage: '/images/news/informatica-inauguracao.jpg',
-      status: 'Published',
-      authorId: admin.id,
-    },
-  });
+  const newsCount = await prisma.news.count();
+  if (newsCount === 0) {
+    await prisma.news.create({
+      data: {
+        title: 'Inauguração das Novas Salas de Informática',
+        subtitle: 'Comunidade ganha computadores novos e cursos gratuitos',
+        summary: 'Graças às contribuições de nossos coroneis e tenentes do Exército de Cristo Rei, inauguramos hoje a nova sala de computadores.',
+        content: '<p>A Associação Cristo Rei do Universo tem a alegria de informar que a nova sala de aula digital foi inaugurada. Equipados com computadores modernos, iniciaremos as novas turmas de informática básica e desenvolvimento web para jovens na próxima segunda-feira.</p><p>Agradecemos a todos os benfeitores que tornaram esse sonho possível através de suas generosas doações mensais via PIX.</p>',
+        coverImage: '/images/news/informatica-inauguracao.jpg',
+        status: 'Published',
+        authorId: admin.id,
+      },
+    });
 
-  await prisma.news.create({
-    data: {
-      title: 'Nossa Noite Cultural Reúne Centenas de Fiéis',
-      subtitle: 'Apresentações artísticas marcaram o último final de semana',
-      summary: 'Noite Cultural da paróquia arrecada fundos para as oficinas gratuitas de música e teatro.',
-      content: '<p>O evento contou com apresentações de violão e flauta dos alunos da oficina de música Cristo Rei. Tivemos também uma peça teatral inspiradora contando a história de dedicação social da comunidade. Todo o valor arrecadado na praça de alimentação será revertido para a manutenção das oficinas gratuitas.</p>',
-      coverImage: '/images/news/noite-cultural-evento.jpg',
-      status: 'Published',
-      authorId: admin.id,
-    },
-  });
-  console.log('Notícias de exemplo criadas.');
+    await prisma.news.create({
+      data: {
+        title: 'Nossa Noite Cultural Reúne Centenas de Fiéis',
+        subtitle: 'Apresentações artísticas marcaram o último final de semana',
+        summary: 'Noite Cultural da paróquia arrecada fundos para as oficinas gratuitas de música e teatro.',
+        content: '<p>O evento contou com apresentações de violão e flauta dos alunos da oficina de música Cristo Rei. Tivemos também uma peça teatral inspiradora contando a história de dedicação social da comunidade. Todo o valor arrecadado na praça de alimentação será revertido para a manutenção das oficinas gratuitas.</p>',
+        coverImage: '/images/news/noite-cultural-evento.jpg',
+        status: 'Published',
+        authorId: admin.id,
+      },
+    });
+    console.log('Notícias de exemplo criadas.');
+  } else {
+    console.log('Notícias de exemplo já existem.');
+  }
 
   // 6. Criar Comunicados Iniciais
-  await prisma.announcement.create({
-    data: {
-      title: 'Assembleia Mensal dos Benfeitores',
-      content: 'Convidamos todos os membros do Exército de Cristo Rei a participarem de nossa assembleia virtual no dia 25 deste mês às 19h30, onde apresentaremos o balanço financeiro e as conquistas do último trimestre.',
-      authorId: admin.id,
-    },
-  });
-  console.log('Comunicados de exemplo criados.');
+  const announcementCount = await prisma.announcement.count();
+  if (announcementCount === 0) {
+    await prisma.announcement.create({
+      data: {
+        title: 'Assembleia Mensal dos Benfeitores',
+        content: 'Convidamos todos os membros do Exército de Cristo Rei a participarem de nossa assembleia virtual no dia 25 deste mês às 19h30, onde apresentaremos o balanço financeiro e as conquistas do último trimestre.',
+        authorId: admin.id,
+      },
+    });
+    console.log('Comunicados de exemplo criados.');
+  } else {
+    console.log('Comunicados de exemplo já existem.');
+  }
 
   console.log('Semeadura do banco de dados concluída com sucesso!');
 }
