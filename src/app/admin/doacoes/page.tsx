@@ -33,6 +33,7 @@ export default function DoacoesAdminPage() {
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState<DonationStatus>('CONFIRMED');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const selectedBenefactor = benefactors.find((ben) => ben.id === benefactorId);
 
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -165,7 +166,9 @@ export default function DoacoesAdminPage() {
                     onValueChange={(val) => setBenefactorId(val || '')}
                   >
                     <SelectTrigger className="w-full border border-input rounded-lg">
-                      <SelectValue placeholder="Escolha o benfeitor..." />
+                      <SelectValue placeholder="Escolha o benfeitor...">
+                        {selectedBenefactor ? `${selectedBenefactor.user.name} (${selectedBenefactor.militaryRank})` : undefined}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="glass border border-border">
                       {benefactors.map((ben) => (
