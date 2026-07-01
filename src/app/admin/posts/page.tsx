@@ -36,6 +36,7 @@ export default function PostsAdminPage() {
   const [coverImage, setCoverImage] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [isPreview, setIsPreview] = useState(false);
+  const selectedCategory = categories.find((cat) => cat.id === categoryId);
 
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -183,7 +184,9 @@ export default function PostsAdminPage() {
                     onValueChange={(val) => setCategoryId(val || '')}
                   >
                     <SelectTrigger className="w-full border border-input rounded-lg">
-                      <SelectValue placeholder="Selecione o projeto social" />
+                      <SelectValue placeholder="Selecione o projeto social">
+                        {selectedCategory ? selectedCategory.name : undefined}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent className="glass border border-border">
                       {categories.map((cat) => (

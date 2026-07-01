@@ -1,9 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Calendar, ArrowRight, BookOpen, Image as ImageIcon } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
 import { getCategoryBySlug } from '@/services/actions/site.actions';
 import { ClientImage } from '@/components/ClientImage';
+import { ProjectGallery } from '@/components/ProjectGallery';
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -53,68 +54,10 @@ export default async function CategoryPage({ params }: Params) {
 
       {/* Seção de Conteúdo e Posts */}
       <div className="container mx-auto px-4 sm:px-6 py-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* Lado Esquerdo: Descrição e Galeria */}
-        <div className="lg:col-span-8 space-y-12">
-          {/* Sobre o Projeto */}
-          <div className="space-y-4">
-            <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary dark:text-primary-foreground">
-              Sobre o Projeto
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
-              {category.description || 'Este projeto é mantido através de doações e do esforço voluntário de membros da comunidade, fornecendo apoio e inserção comunitária.'}
-            </p>
-          </div>
-
-          {/* Projetos/Subações Associados */}
-          {category.projects && category.projects.length > 0 && (
-            <div className="space-y-6 pt-4">
-              <h3 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground">
-                Iniciativas de {category.name}
-              </h3>
-              <div className="grid grid-cols-1 gap-6">
-                {category.projects.map((proj) => (
-                  <div
-                    key={proj.id}
-                    className="p-6 rounded-2xl border border-border bg-card shadow-sm space-y-3"
-                  >
-                    <h4 className="font-serif text-lg font-bold text-secondary">{proj.name}</h4>
-                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">{proj.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Galeria de Fotos */}
-          {galleryImages.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground flex items-center gap-2">
-                <ImageIcon className="h-5 w-5 text-secondary" />
-                Galeria do Projeto
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {galleryImages.slice(0, 6).map((imgUrl, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square rounded-xl overflow-hidden border border-border bg-muted relative"
-                  >
-                    <ClientImage
-                      src={imgUrl}
-                      alt={`Imagem ${index + 1} de ${category.name}`}
-                      className="w-full h-full object-cover hover:scale-105 transition duration-300"
-                      fallbackSrc="/images/logo.png"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Lado Direito: Feed de Postagens/Atualizações */}
-        <div className="lg:col-span-4 space-y-8">
+        {/* Lado Esquerdo: Feed de Postagens/Posts */}
+        <div className="lg:col-span-8 space-y-8">
           <h3 className="font-serif text-2xl font-bold text-primary dark:text-primary-foreground pb-2 border-b border-border">
-            Atualizações
+            Posts
           </h3>
 
           {category.posts.length === 0 ? (
@@ -122,7 +65,7 @@ export default async function CategoryPage({ params }: Params) {
               Nenhuma postagem realizada neste projeto ainda.
             </div>
           ) : (
-            <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {category.posts.map((post) => (
                 <article
                   key={post.id}
@@ -167,6 +110,44 @@ export default async function CategoryPage({ params }: Params) {
                 </article>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* Lado Direito: Descrição e Galeria */}
+        <div className="lg:col-span-4 space-y-12">
+          {/* Sobre o Projeto */}
+          <div className="space-y-4">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary dark:text-primary-foreground">
+              Sobre o Projeto
+            </h2>
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
+              {category.description || 'Este projeto é mantido através de doações e do esforço voluntário de membros da comunidade, fornecendo apoio e inserção comunitária.'}
+            </p>
+          </div>
+
+          {/* Projetos/Subações Associados */}
+          {category.projects && category.projects.length > 0 && (
+            <div className="space-y-6 pt-4">
+              <h3 className="font-serif text-xl font-bold text-primary dark:text-primary-foreground">
+                Iniciativas de {category.name}
+              </h3>
+              <div className="grid grid-cols-1 gap-6">
+                {category.projects.map((proj) => (
+                  <div
+                    key={proj.id}
+                    className="p-6 rounded-2xl border border-border bg-card shadow-sm space-y-3"
+                  >
+                    <h4 className="font-serif text-lg font-bold text-secondary">{proj.name}</h4>
+                    <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium">{proj.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Galeria de Fotos Interativa */}
+          {galleryImages.length > 0 && (
+            <ProjectGallery images={galleryImages} projectName={category.name} />
           )}
         </div>
       </div>

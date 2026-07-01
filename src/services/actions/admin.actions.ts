@@ -175,23 +175,28 @@ export async function createPost(
   adminId: string,
   data: { title: string; summary: string; content: string; coverImage?: string; categoryId: string }
 ) {
-  const slug = data.title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-');
+  try {
+    const slug = data.title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-');
 
-  const post = await prisma.post.create({
-    data: {
-      ...data,
-      slug,
-      authorId: adminId,
-      status: 'Published',
-    },
-  });
-  await logAction(adminId, 'CRIAR_POST_PROJETO', `Criou post: ${post.title} (${post.slug})`);
-  return { success: true, data: post };
+    const post = await prisma.post.create({
+      data: {
+        ...data,
+        slug,
+        authorId: adminId,
+        status: 'Published',
+      },
+    });
+    await logAction(adminId, 'CRIAR_POST_PROJETO', `Criou post: ${post.title} (${post.slug})`);
+    return { success: true, data: post };
+  } catch (error) {
+    console.error('Erro ao criar post:', error);
+    return { success: false, error: 'Falha ao criar postagem no banco de dados.' };
+  }
 }
 
 export async function updatePost(
@@ -199,28 +204,38 @@ export async function updatePost(
   postId: string,
   data: { title: string; summary: string; content: string; coverImage?: string; categoryId: string }
 ) {
-  const slug = data.title
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^\w\s-]/g, '')
-    .replace(/\s+/g, '-');
+  try {
+    const slug = data.title
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-');
 
-  const post = await prisma.post.update({
-    where: { id: postId },
-    data: {
-      ...data,
-      slug,
-    },
-  });
-  await logAction(adminId, 'EDITAR_POST_PROJETO', `Editou post ID: ${postId}`);
-  return { success: true, data: post };
+    const post = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        ...data,
+        slug,
+      },
+    });
+    await logAction(adminId, 'EDITAR_POST_PROJETO', `Editou post ID: ${postId}`);
+    return { success: true, data: post };
+  } catch (error) {
+    console.error('Erro ao editar post:', error);
+    return { success: false, error: 'Falha ao atualizar postagem no banco de dados.' };
+  }
 }
 
 export async function deletePost(adminId: string, postId: string) {
-  await prisma.post.delete({ where: { id: postId } });
-  await logAction(adminId, 'DELETAR_POST_PROJETO', `Deletou post ID: ${postId}`);
-  return { success: true };
+  try {
+    await prisma.post.delete({ where: { id: postId } });
+    await logAction(adminId, 'DELETAR_POST_PROJETO', `Deletou post ID: ${postId}`);
+    return { success: true };
+  } catch (error) {
+    console.error('Erro ao deletar post:', error);
+    return { success: false, error: 'Falha ao deletar postagem no banco de dados.' };
+  }
 }
 
 // --- CRUD CARROSSEL ---
