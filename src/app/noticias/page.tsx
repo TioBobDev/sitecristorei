@@ -27,8 +27,8 @@ export default async function NoticiasPage() {
 
         {/* Notícia Destacada (Primeira do Feed, se houver) */}
         {newsList.length > 0 && (
-          <div className="group relative rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12">
-            <div className="lg:col-span-7 aspect-video lg:aspect-auto min-h-[300px] overflow-hidden bg-muted relative">
+          <div className="group relative rounded-2xl border border-border bg-card overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 lg:h-[350px]">
+            <div className="lg:col-span-5 h-full min-h-[250px] lg:min-h-0 overflow-hidden bg-muted relative">
               {newsList[0].coverImage ? (
                 <ClientImage
                   src={newsList[0].coverImage}
@@ -42,8 +42,8 @@ export default async function NoticiasPage() {
                 </div>
               )}
             </div>
-            <div className="lg:col-span-5 p-6 md:p-8 flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
+            <div className="lg:col-span-7 p-6 md:p-8 flex flex-col justify-between h-full space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center gap-4 text-xs text-muted-foreground font-semibold">
                   <span className="flex items-center gap-1">
                     <Calendar className="h-3.5 w-3.5 text-secondary" />
@@ -54,24 +54,24 @@ export default async function NoticiasPage() {
                     })}
                   </span>
                 </div>
-                <h2 className="font-serif text-2xl md:text-3xl font-bold text-primary dark:text-primary-foreground leading-tight group-hover:text-secondary transition">
+                <h2 className="font-serif text-xl md:text-2xl lg:text-3xl font-bold text-primary dark:text-primary-foreground leading-tight group-hover:text-secondary transition line-clamp-2">
                   {newsList[0].title}
                 </h2>
                 {newsList[0].subtitle && (
-                  <p className="text-sm text-secondary font-semibold">
+                  <p className="text-xs md:text-sm text-secondary font-semibold line-clamp-1">
                     {newsList[0].subtitle}
                   </p>
                 )}
-                <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                <p className="text-xs md:text-sm text-muted-foreground leading-relaxed font-medium line-clamp-3">
                   {newsList[0].summary}
                 </p>
               </div>
-              <div>
+              <div className="pt-2">
                 <Link
                   href={`/noticias/${newsList[0].id}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold text-sm transition cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco font-bold text-xs md:text-sm transition cursor-pointer"
                 >
-                  Ler Notícia Completa <ArrowRight className="h-4 w-4" />
+                  Ler Notícia Completa <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>
