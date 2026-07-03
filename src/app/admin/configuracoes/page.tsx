@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Settings, Check, AlertCircle, Sparkles, DollarSign } from 'lucide-react';
+import { ImageUpload } from '@/components/ImageUpload';
 
 export default function ConfiguracoesAdminPage() {
   const { data: session } = useSession();
@@ -183,9 +184,13 @@ export default function ConfiguracoesAdminPage() {
                 <Label htmlFor="cfg-bank">Banco do Destinatário</Label>
                 <Input id="cfg-bank" value={pixBank} onChange={(e) => setPixBank(e.target.value)} placeholder="Ex: Banco do Brasil" />
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="cfg-qrcode">QR Code PIX (URL ou Base64 Imagem)</Label>
-                <Input id="cfg-qrcode" value={pixQrCode} onChange={(e) => setPixQrCode(e.target.value)} placeholder="data:image/png;base64,..." />
+              <div className="space-y-1.5 col-span-1 md:col-span-2">
+                <Label>QR Code PIX (Upload ou URL de Imagem)</Label>
+                <ImageUpload
+                  value={pixQrCode}
+                  onChange={(url) => setPixQrCode(url)}
+                  placeholder="Selecione ou arraste o QR Code do PIX"
+                />
               </div>
               <div className="col-span-1 md:col-span-2 space-y-1.5">
                 <Label htmlFor="cfg-thank">Mensagem de Agradecimento (Pós-doação)</Label>
