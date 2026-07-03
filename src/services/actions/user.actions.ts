@@ -134,3 +134,81 @@ export async function registerBenefactor(data: {
     return { success: false, error: error.message || 'Falha ao processar o cadastro.' };
   }
 }
+
+export async function createDonationForLoggedInUser(userId: string, militaryRank: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { benefactor: true },
+    });
+
+    if (!user) {
+      return { success: false, error: 'Usuário não encontrado.' };
+    }
+
+    const rankValues: Record<string, number> = {
+      'Coronel': 100.0,
+      'Tenente-Coronel': 90.0,
+      'Major': 80.0,
+      'Capitão': 70.0,
+      'Primeiro Tenente': 60.0,
+      'Segundo Tenente': 50.0,
+    };
+    const amount = rankValues[militaryRank] || 50.0;
+
+    let benefactor = user.benefactor;
+
+    // Se o usuário não tiver cadastro de benfeitor (ex: Admin ou Editor fazendo doação de teste),
+    // criamos um registro mínimo para possibilitar o fluxo.
+    if (!benefactor) {
+      benefactor = await prisma.benefactor.create({
+        data: {
+          userId: user.id,
+          cpf: `USER-${user.id.slice(0, 8)}`,
+          birthDate: new Date('1990-01-01'),
+          phone: '0000000000',
+          address: 'Não informado',
+          militaryRank: militaryRank,
+        },
+      });
+    } else {
+      // Atualiza a patente do benfeitor
+      benefactor = await prisma.benefactor.update({
+        where: { id: benefactor.id },
+        data: { militaryRank },
+      });
+    }
+
+    // Criar a doação pendente correspondente ao plano mensal
+    const donation = await prisma.donation.create({
+      data: {
+        amount,
+        status: 'PENDING',
+        benefactorId: benefactor.id,
+      },
+    });
+
+    // Carregar as configurações de PIX
+    const settings = await prisma.siteSettings.findUnique({
+      where: { id: 'singleton' },
+    });
+
+    return {
+      success: true,
+      data: {
+        userId: user.id,
+        donationId: donation.id,
+        amount: donation.amount,
+        pixKey: settings?.pixKey || 'financeiro@cristorei.org',
+        pixBank: settings?.pixBank || 'Banco do Brasil',
+        pixReceiver: settings?.pixReceiver || 'Associação Cristo Rei do Universo',
+        pixQrCode: settings?.pixQrCode || '',
+        thankYouMsg: settings?.thankYouMsg || 'Muito obrigado por sua doação e por fazer parte do Exército de Cristo Rei!',
+      },
+    };
+  } catch (error: any) {
+    console.error('Erro ao gerar doação para usuário logado:', error);
+    return { success: false, error: error.message || 'Falha ao processar doação.' };
+  }
+}
+

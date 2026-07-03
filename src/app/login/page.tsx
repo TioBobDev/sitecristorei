@@ -23,6 +23,8 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const typeParam = searchParams.get('type');
+  const reasonParam = searchParams.get('reason');
+  const isInactive = reasonParam === 'inactive';
 
   const [activeTab, setActiveTab] = useState<'benfeitor' | 'admin'>('benfeitor');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -154,6 +156,13 @@ function LoginContent() {
             Igreja Cristo Rei do Universo
           </p>
         </div>
+
+        {isInactive && !errorMsg && (
+          <div className="p-3 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-300 text-xs rounded-lg border border-amber-200 dark:border-amber-900/40 font-medium flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-amber-500 animate-ping" />
+            Sua sessão expirou devido à inatividade. Por favor, faça login novamente.
+          </div>
+        )}
 
         {errorMsg && (
           <div className="p-3 bg-red-100 text-red-700 text-xs rounded-lg border border-red-200 font-medium">

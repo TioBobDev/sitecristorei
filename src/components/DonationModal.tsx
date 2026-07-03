@@ -15,7 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield, ChevronRight, Copy, Check, Heart, Award, Calendar } from 'lucide-react';
-import { registerBenefactor } from '@/services/actions/user.actions';
+import { useSession } from 'next-auth/react';
+import { registerBenefactor, createDonationForLoggedInUser } from '@/services/actions/user.actions';
 
 // Validador de CPF brasileiro
 function validateCPF(cpf: string) {
@@ -101,6 +102,8 @@ interface DonationModalProps {
 }
 
 export function DonationModal({ open, onOpenChange }: DonationModalProps) {
+  const { data: session } = useSession();
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedRank, setSelectedRank] = useState(ranks[5]); // Segundo Tenente padrão
   const [copied, setCopied] = useState(false);
@@ -124,8 +127,32 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
     }
   };
 
+  const handleDonateLoggedIn = async () => {
+    if (!session?.user?.id) return;
+    setSubmitting(true);
+    setErrorMsg(null);
+    try {
+      const res = await createDonationForLoggedInUser(session.user.id, selectedRank.name);
+      if (res.success && res.data) {
+        setPixData(res.data);
+        setStep(3);
+      } else {
+        setErrorMsg(res.error || 'Falha ao processar doação.');
+      }
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Ocorreu um erro no servidor. Tente novamente mais tarde.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleNextStep = () => {
-    setStep(2);
+    if (session) {
+      handleDonateLoggedIn();
+    } else {
+      setStep(2);
+    }
   };
 
   const handleFormSubmit = async (values: FormValues) => {
@@ -219,8 +246,23 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               ))}
             </div>
 
-            <Button onClick={handleNextStep} className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition">
-              Avançar para o Cadastro <ChevronRight className="ml-2 h-4 w-4" />
+            <Button
+              onClick={handleNextStep}
+              disabled={submitting}
+              className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition"
+            >
+              {submitting ? (
+                'Processando...'
+              ) : session ? (
+                <>
+                  Confirmar e doar como {session.user?.name}{' '}
+                  <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  Avançar para o Cadastro <ChevronRight className="ml-2 h-4 w-4" />
+                </>
+              )}
             </Button>
           </div>
         )}
