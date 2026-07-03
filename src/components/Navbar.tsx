@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Heart, Shield, User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react';
+import { Menu, X, Heart, Shield, User, LogOut, LayoutDashboard, ChevronDown, Facebook, Instagram, Youtube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -16,7 +16,13 @@ import { signOut } from 'next-auth/react';
 
 interface NavbarProps {
   categories: { id: string; name: string; slug: string }[];
-  siteSettings: { name: string; logoUrl: string | null };
+  siteSettings: { 
+    name: string; 
+    logoUrl: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+    youtube?: string | null;
+  };
   session: any;
 }
 
@@ -173,6 +179,47 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                 <Shield className="h-4 w-4" /> Área do Associado
               </Button>
             )}
+
+            {/* Redes Sociais */}
+            {((siteSettings.facebook && siteSettings.facebook.trim() !== '') ||
+              (siteSettings.instagram && siteSettings.instagram.trim() !== '') ||
+              (siteSettings.youtube && siteSettings.youtube.trim() !== '')) && (
+              <div className="flex items-center gap-3 border-l border-border pl-4 ml-1">
+                {siteSettings.facebook && siteSettings.facebook.trim() !== '' && (
+                  <a
+                    href={siteSettings.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-secondary transition-colors"
+                    title="Facebook"
+                  >
+                    <Facebook className="h-4.5 w-4.5" />
+                  </a>
+                )}
+                {siteSettings.instagram && siteSettings.instagram.trim() !== '' && (
+                  <a
+                    href={siteSettings.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-secondary transition-colors"
+                    title="Instagram"
+                  >
+                    <Instagram className="h-4.5 w-4.5" />
+                  </a>
+                )}
+                {siteSettings.youtube && siteSettings.youtube.trim() !== '' && (
+                  <a
+                    href={siteSettings.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-secondary transition-colors"
+                    title="YouTube"
+                  >
+                    <Youtube className="h-4.5 w-4.5" />
+                  </a>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -288,6 +335,53 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                 <Button render={<Link href="/login" onClick={() => setMobileMenuOpen(false)} />} variant="outline" className="w-full justify-center border-primary text-primary dark:text-primary-foreground dark:border-border cursor-pointer">
                   <Shield className="h-4 w-4 mr-2" /> Área do Associado
                 </Button>
+              )}
+
+              {/* Redes Sociais no Mobile */}
+              {((siteSettings.facebook && siteSettings.facebook.trim() !== '') ||
+                (siteSettings.instagram && siteSettings.instagram.trim() !== '') ||
+                (siteSettings.youtube && siteSettings.youtube.trim() !== '')) && (
+                <>
+                  <hr className="border-border my-3" />
+                  <div className="flex justify-center gap-6 py-2">
+                    {siteSettings.facebook && siteSettings.facebook.trim() !== '' && (
+                      <a
+                        href={siteSettings.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-secondary transition-colors"
+                        title="Facebook"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Facebook className="h-5 w-5" />
+                      </a>
+                    )}
+                    {siteSettings.instagram && siteSettings.instagram.trim() !== '' && (
+                      <a
+                        href={siteSettings.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-secondary transition-colors"
+                        title="Instagram"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Instagram className="h-5 w-5" />
+                      </a>
+                    )}
+                    {siteSettings.youtube && siteSettings.youtube.trim() !== '' && (
+                      <a
+                        href={siteSettings.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-secondary transition-colors"
+                        title="YouTube"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Youtube className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>

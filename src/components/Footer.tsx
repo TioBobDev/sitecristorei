@@ -37,7 +37,7 @@ export function Footer({ siteSettings }: FooterProps) {
           </p>
           {/* Redes Sociais */}
           <div className="flex gap-4 mt-2">
-            {siteSettings?.facebook && (
+            {siteSettings?.facebook && siteSettings.facebook.trim() !== '' && (
               <a
                 href={siteSettings.facebook}
                 target="_blank"
@@ -47,7 +47,7 @@ export function Footer({ siteSettings }: FooterProps) {
                 <Facebook className="h-5 w-5" />
               </a>
             )}
-            {siteSettings?.instagram && (
+            {siteSettings?.instagram && siteSettings.instagram.trim() !== '' && (
               <a
                 href={siteSettings.instagram}
                 target="_blank"
@@ -57,7 +57,7 @@ export function Footer({ siteSettings }: FooterProps) {
                 <Instagram className="h-5 w-5" />
               </a>
             )}
-            {siteSettings?.youtube && (
+            {siteSettings?.youtube && siteSettings.youtube.trim() !== '' && (
               <a
                 href={siteSettings.youtube}
                 target="_blank"

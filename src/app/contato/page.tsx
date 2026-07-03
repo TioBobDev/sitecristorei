@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, HelpCircle, Facebook, Instagram, Youtube } from 'lucide-react';
 import { getSiteSettings } from '@/services/actions/site.actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -74,6 +74,50 @@ export default async function ContatoPage() {
                   </div>
                 )}
               </div>
+              
+              {/* Redes Sociais */}
+              {((settings?.facebook && settings.facebook.trim() !== '') ||
+                (settings?.instagram && settings.instagram.trim() !== '') ||
+                (settings?.youtube && settings.youtube.trim() !== '')) && (
+                <div className="pt-4 border-t border-border space-y-2 mt-4">
+                  <div className="text-xs font-bold text-primary dark:text-primary-foreground uppercase tracking-wider">Redes Sociais</div>
+                  <div className="flex gap-2.5">
+                    {settings?.facebook && settings.facebook.trim() !== '' && (
+                      <a
+                        href={settings.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-ouro-bianco transition shadow-xs"
+                        title="Facebook"
+                      >
+                        <Facebook className="h-4 w-4" />
+                      </a>
+                    )}
+                    {settings?.instagram && settings.instagram.trim() !== '' && (
+                      <a
+                        href={settings.instagram}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-ouro-bianco transition shadow-xs"
+                        title="Instagram"
+                      >
+                        <Instagram className="h-4 w-4" />
+                      </a>
+                    )}
+                    {settings?.youtube && settings.youtube.trim() !== '' && (
+                      <a
+                        href={settings.youtube}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="h-9 w-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary hover:text-ouro-bianco transition shadow-xs"
+                        title="YouTube"
+                      >
+                        <Youtube className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Dúvidas Frequentes Box */}
