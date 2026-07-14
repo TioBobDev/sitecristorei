@@ -38,7 +38,10 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
   if (slides.length === 0) {
     // Carrossel padrão/fallback caso não haja imagens cadastradas
     return (
-      <div className="relative w-full h-[200px] sm:h-[300px] md:h-[500px] bg-gradient-to-r from-primary to-secondary/60 flex items-center justify-center text-center p-6 border-b border-secondary/20">
+      <div 
+        className="relative w-full max-h-[500px] bg-gradient-to-r from-primary to-secondary/60 flex items-center justify-center text-center p-6 border-b border-secondary/20"
+        style={{ aspectRatio: '1920/555' }}
+      >
         <div className="max-w-2xl text-primary-foreground space-y-2 sm:space-y-4">
           <h2 className="font-serif text-xl sm:text-3xl md:text-5xl font-bold text-ouro-bianco">
             Associação Cristo Rei do Universo
@@ -57,7 +60,10 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
   }
 
   return (
-    <div className="relative w-full h-[200px] sm:h-[350px] md:h-[500px] lg:h-[550px] overflow-hidden bg-primary group">
+    <div 
+      className="relative w-full max-h-[555px] overflow-hidden bg-primary group"
+      style={{ aspectRatio: '1920/555' }}
+    >
       {/* Slides */}
       {slides.map((slide, index) => (
         <div
@@ -77,7 +83,7 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
           />
 
           {/* Conteúdo do Slide */}
-          <div className="absolute inset-0 z-25 flex items-end justify-center pb-8 sm:pb-12 md:pb-16 p-4 sm:p-6 text-center">
+          <div className="absolute inset-0 z-25 flex items-end justify-center pb-8 sm:pb-12 md:pb-16 p-4 sm:p-6 text-center hidden sm:flex">
             <div className="max-w-3xl text-primary-foreground space-y-2 sm:space-y-4 animate-in fade-in slide-in-from-bottom-5 duration-700">
               {slide.title && (
                 <h2 className="font-serif text-xl sm:text-3xl md:text-5xl font-bold text-ouro-bianco tracking-tight">
