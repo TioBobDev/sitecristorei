@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { DonationStatus } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 // Função auxiliar de log administrativo
 async function logAction(userId: string, action: string, details?: string) {
@@ -417,6 +418,100 @@ export async function getAdminLogs() {
   } catch (error) {
     console.error('Erro ao buscar logs administrativos:', error);
     return [];
+  }
+}
+
+// --- GERENCIAMENTO DE ADMINISTRADORES ---
+
+export async function getAdminUsers(adminId: string) {
+  try {
+    const requester = await prisma.user.findUnique({ where: { id: adminId } });
+    if (!requester || (requester.role !== 'ADMIN' && requester.role !== 'EDITOR')) {
+      throw new Error('Não autorizado.');
+    }
+
+    return await prisma.user.findMany({
+      where: {
+        role: { in: ['ADMIN', 'EDITOR'] },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+  } catch (error) {
+    console.error('Erro ao buscar usuários administrativos:', error);
+    return [];
+  }
+}
+
+export async function createAdminUser(
+  adminId: string,
+  data: { name: string; email: string; role: 'ADMIN' | 'EDITOR'; passwordRaw: string }
+) {
+  try {
+    const requester = await prisma.user.findUnique({ where: { id: adminId } });
+    if (!requester || requester.role !== 'ADMIN') {
+      return { success: false, error: 'Acesso negado. Apenas administradores podem criar novos usuários.' };
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+    if (existingUser) {
+      return { success: false, error: 'Este e-mail já está cadastrado no sistema.' };
+    }
+
+    const hashedPassword = await bcrypt.hash(data.passwordRaw, 10);
+
+    const user = await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        role: data.role,
+        passwordHash: hashedPassword,
+      },
+    });
+
+    await logAction(adminId, 'CRIAR_ADMINISTRADOR', `Criou usuário administrativo: ${user.name} (${user.email}) - Papel: ${user.role}`);
+    
+    return { success: true, data: { id: user.id, name: user.name, email: user.email, role: user.role } };
+  } catch (error: any) {
+    console.error('Erro ao criar usuário administrativo:', error);
+    return { success: false, error: error.message || 'Falha ao processar o cadastro.' };
+  }
+}
+
+export async function deleteAdminUser(adminId: string, targetUserId: string) {
+  try {
+    const requester = await prisma.user.findUnique({ where: { id: adminId } });
+    if (!requester || requester.role !== 'ADMIN') {
+      return { success: false, error: 'Acesso negado. Apenas administradores podem excluir usuários.' };
+    }
+
+    if (adminId === targetUserId) {
+      return { success: false, error: 'Você não pode excluir a sua própria conta ativa.' };
+    }
+
+    const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
+    if (!targetUser) {
+      return { success: false, error: 'Usuário não encontrado.' };
+    }
+
+    await prisma.user.delete({
+      where: { id: targetUserId },
+    });
+
+    await logAction(adminId, 'DELETAR_ADMINISTRADOR', `Excluiu usuário administrativo: ${targetUser.name} (${targetUser.email})`);
+    
+    return { success: true };
+  } catch (error: any) {
+    console.error('Erro ao excluir usuário administrativo:', error);
+    return { success: false, error: error.message || 'Falha ao processar exclusão.' };
   }
 }
 

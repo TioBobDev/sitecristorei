@@ -112,6 +112,15 @@ export default async function AdminLayout({
               <DollarSign className="h-4 w-4 text-ouro shrink-0" /> Doações
             </Link>
 
+            {session.user?.role === 'ADMIN' && (
+              <Link
+                href="/admin/usuarios"
+                className="flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg text-primary-foreground/80 hover:text-ouro hover:bg-white/5 transition"
+              >
+                <Users className="h-4 w-4 text-ouro shrink-0" /> Administradores
+              </Link>
+            )}
+
             <div className="my-2 border-t border-white/10" />
             <div className="text-[10px] text-primary-foreground/45 uppercase font-bold tracking-widest px-3 mb-1">CONFIGS</div>
 
