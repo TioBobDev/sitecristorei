@@ -29,6 +29,7 @@ export async function registerBenefactor(data: {
   address: string;
   militaryRank: string;
   passwordHash: string;
+  customAmount?: number;
 }) {
   try {
     // 0. Validar CPF por algoritmo matemático
@@ -69,14 +70,20 @@ export async function registerBenefactor(data: {
 
       // Mapear valores por patente militar
       const rankValues: Record<string, number> = {
-        'Coronel': 100.0,
-        'Tenente-Coronel': 90.0,
-        'Major': 80.0,
-        'Capitão': 70.0,
-        'Primeiro Tenente': 60.0,
+        'Coronel': 1000.0,
+        'Tenente-Coronel': 500.0,
+        'Major': 300.0,
+        'Capitão': 200.0,
+        'Primeiro Tenente': 100.0,
         'Segundo Tenente': 50.0,
       };
-      const amount = rankValues[data.militaryRank] || 50.0;
+      
+      let amount = 50.0;
+      if (data.militaryRank === 'Oficial Espontâneo') {
+        amount = data.customAmount || 10.0;
+      } else {
+        amount = rankValues[data.militaryRank] || 50.0;
+      }
 
       // Criar benfeitor vinculado
       const benefactor = await tx.benefactor.create({
@@ -135,7 +142,7 @@ export async function registerBenefactor(data: {
   }
 }
 
-export async function createDonationForLoggedInUser(userId: string, militaryRank: string) {
+export async function createDonationForLoggedInUser(userId: string, militaryRank: string, customAmount?: number) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -147,14 +154,20 @@ export async function createDonationForLoggedInUser(userId: string, militaryRank
     }
 
     const rankValues: Record<string, number> = {
-      'Coronel': 100.0,
-      'Tenente-Coronel': 90.0,
-      'Major': 80.0,
-      'Capitão': 70.0,
-      'Primeiro Tenente': 60.0,
+      'Coronel': 1000.0,
+      'Tenente-Coronel': 500.0,
+      'Major': 300.0,
+      'Capitão': 200.0,
+      'Primeiro Tenente': 100.0,
       'Segundo Tenente': 50.0,
     };
-    const amount = rankValues[militaryRank] || 50.0;
+    
+    let amount = 50.0;
+    if (militaryRank === 'Oficial Espontâneo') {
+      amount = customAmount || 10.0;
+    } else {
+      amount = rankValues[militaryRank] || 50.0;
+    }
 
     let benefactor = user.benefactor;
 

@@ -40,6 +40,8 @@ export default function BenfeitoresAdminPage() {
         return 'bg-blue-100 text-blue-800 dark:bg-blue-950/30 dark:text-blue-400 border border-blue-200';
       case 'Capitão':
         return 'bg-green-100 text-green-800 dark:bg-green-950/30 dark:text-green-400 border border-green-200';
+      case 'Oficial Espontâneo':
+        return 'bg-purple-100 text-purple-800 dark:bg-purple-950/30 dark:text-purple-400 border border-purple-200';
       default:
         return 'bg-gray-100 text-gray-800 dark:bg-gray-950/30 dark:text-gray-400 border border-gray-200';
     }

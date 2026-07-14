@@ -39,31 +39,31 @@ function validateCPF(cpf: string) {
 const ranks = [
   {
     name: 'Coronel',
-    value: 100,
+    value: 1000,
     desc: 'O mais alto grau de apadrinhamento e dedicação social.',
     benefits: ['Acesso a comunicados privados', 'Certificado físico de Honra Ouro', 'Nome em placa de benfeitores na paróquia', 'Participação em fóruns'],
   },
   {
     name: 'Tenente-Coronel',
-    value: 90,
+    value: 500,
     desc: 'Contribuição vital para manter a qualidade das oficinas.',
     benefits: ['Acesso a comunicados privados', 'Certificado digital de Benfeitor Prata', 'Boletim impresso bimestral'],
   },
   {
     name: 'Major',
-    value: 80,
+    value: 300,
     desc: 'Ajuda crucial no lanche e nos materiais dos alunos.',
     benefits: ['Acesso a comunicados privados', 'Certificado digital de Benfeitor Bronze', 'Boletim digital mensal'],
   },
   {
     name: 'Capitão',
-    value: 70,
+    value: 200,
     desc: 'Apoio na compra de suprimentos esportivos e musicais.',
     benefits: ['Acesso a comunicados privados', 'Boletim digital bimestral'],
   },
   {
     name: 'Primeiro Tenente',
-    value: 60,
+    value: 100,
     desc: 'Custeio das oficinas de apoio escolar e lazer.',
     benefits: ['Acesso a comunicados privados', 'Informativo digital trimestral'],
   },
@@ -71,6 +71,12 @@ const ranks = [
     name: 'Segundo Tenente',
     value: 50,
     desc: 'Adesão padrão ao Exército de Cristo Rei.',
+    benefits: ['Acesso a comunicados privados', 'Recebimento de e-mails de impacto'],
+  },
+  {
+    name: 'Oficial Espontâneo',
+    value: 0,
+    desc: 'Doação de valor espontâneo para apoiar as atividades sociais.',
     benefits: ['Acesso a comunicados privados', 'Recebimento de e-mails de impacto'],
   },
 ];
@@ -106,6 +112,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedRank, setSelectedRank] = useState(ranks[5]); // Segundo Tenente padrão
+  const [customAmount, setCustomAmount] = useState<string>('50');
   const [copied, setCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -132,7 +139,18 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
     setSubmitting(true);
     setErrorMsg(null);
     try {
-      const res = await createDonationForLoggedInUser(session.user.id, selectedRank.name);
+      const parsedAmount = parseFloat(customAmount);
+      if (selectedRank.name === 'Oficial Espontâneo' && (isNaN(parsedAmount) || parsedAmount <= 0)) {
+        setErrorMsg('Por favor, informe um valor válido maior que zero para a doação espontânea.');
+        setSubmitting(false);
+        return;
+      }
+
+      const res = await createDonationForLoggedInUser(
+        session.user.id,
+        selectedRank.name,
+        selectedRank.name === 'Oficial Espontâneo' ? parsedAmount : undefined
+      );
       if (res.success && res.data) {
         setPixData(res.data);
         setStep(3);
@@ -148,6 +166,12 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
   };
 
   const handleNextStep = () => {
+    const parsedAmount = parseFloat(customAmount);
+    if (selectedRank.name === 'Oficial Espontâneo' && (isNaN(parsedAmount) || parsedAmount <= 0)) {
+      setErrorMsg('Por favor, informe um valor válido maior que zero para a doação espontânea.');
+      return;
+    }
+    setErrorMsg(null);
     if (session) {
       handleDonateLoggedIn();
     } else {
@@ -159,6 +183,13 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
     setSubmitting(true);
     setErrorMsg(null);
 
+    const parsedAmount = parseFloat(customAmount);
+    if (selectedRank.name === 'Oficial Espontâneo' && (isNaN(parsedAmount) || parsedAmount <= 0)) {
+      setErrorMsg('Por favor, informe um valor válido maior que zero para a doação espontânea.');
+      setSubmitting(false);
+      return;
+    }
+
     const res = await registerBenefactor({
       name: values.name,
       email: values.email,
@@ -168,6 +199,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
       address: values.address,
       militaryRank: selectedRank.name,
       passwordHash: values.password,
+      customAmount: selectedRank.name === 'Oficial Espontâneo' ? parsedAmount : undefined,
     });
 
     setSubmitting(false);
@@ -241,10 +273,33 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
                 >
                   <Award className={`h-6 w-6 mb-1 ${selectedRank.name === r.name ? 'text-secondary' : 'text-muted-foreground'}`} />
                   <span className="text-xs font-bold uppercase tracking-wider">{r.name}</span>
-                  <span className="text-sm font-semibold text-secondary mt-1">R$ {r.value.toFixed(2)}/mês</span>
+                  <span className="text-sm font-semibold text-secondary mt-1">
+                    {r.name === 'Oficial Espontâneo' ? 'Valor Livre' : `R$ ${r.value.toFixed(2)}/mês`}
+                  </span>
                 </button>
               ))}
             </div>
+
+            {selectedRank.name === 'Oficial Espontâneo' && (
+              <div className="mt-2 p-4 bg-muted/40 rounded-xl border border-border space-y-2">
+                <Label htmlFor="customAmount" className="text-sm font-bold text-primary dark:text-primary-foreground">
+                  Valor da Doação Espontânea (R$)
+                </Label>
+                <Input
+                  id="customAmount"
+                  type="number"
+                  min="1"
+                  step="any"
+                  placeholder="Digite o valor desejado (ex: 75)"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="text-lg font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Contribua mensalmente com qualquer valor a partir de R$ 1,00.
+                </p>
+              </div>
+            )}
 
             <Button
               onClick={handleNextStep}
@@ -271,7 +326,14 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
         {step === 2 && (
           <form onSubmit={handleSubmit(handleFormSubmit)} className="mt-4 space-y-4">
             <div className="p-3 bg-secondary/15 rounded-xl border border-secondary/35 text-xs text-primary dark:text-primary-foreground font-semibold flex items-center justify-between">
-              <span>Plano Selecionado: <strong>{selectedRank.name} (R$ {selectedRank.value.toFixed(2)}/mês)</strong></span>
+              <span>
+                Plano Selecionado:{' '}
+                <strong>
+                  {selectedRank.name} ({selectedRank.name === 'Oficial Espontâneo'
+                    ? `R$ ${parseFloat(customAmount || '0').toFixed(2)}`
+                    : `R$ ${selectedRank.value.toFixed(2)}`}/mês)
+                </strong>
+              </span>
               <button
                 type="button"
                 onClick={() => setStep(1)}
