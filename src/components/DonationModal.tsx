@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield, ChevronRight, Copy, Check, Heart, Award, Calendar } from 'lucide-react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { registerBenefactor, createDonationForLoggedInUser } from '@/services/actions/user.actions';
 
 // Validador de CPF brasileiro
@@ -109,6 +110,7 @@ interface DonationModalProps {
 
 export function DonationModal({ open, onOpenChange }: DonationModalProps) {
   const { data: session } = useSession();
+  const router = useRouter();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedRank, setSelectedRank] = useState(ranks[5]); // Segundo Tenente padrão
@@ -172,11 +174,8 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
       return;
     }
     setErrorMsg(null);
-    if (session) {
-      handleDonateLoggedIn();
-    } else {
-      setStep(2);
-    }
+    handleClose();
+    router.push('/seja-um-benfeitor');
   };
 
   const handleFormSubmit = async (values: FormValues) => {
@@ -307,12 +306,7 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
               className="w-full h-12 text-base font-bold bg-primary text-ouro-bianco hover:bg-secondary hover:text-ouro-bianco cursor-pointer transition"
             >
               {submitting ? (
-                'Processando...'
-              ) : session ? (
-                <>
-                  Confirmar e doar como {session.user?.name}{' '}
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </>
+                'Redirecionando...'
               ) : (
                 <>
                   Avançar para o Cadastro <ChevronRight className="ml-2 h-4 w-4" />
