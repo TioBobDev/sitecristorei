@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { Shield, Eye, EyeOff, Lock, Mail, ArrowLeft, Heart, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,10 +26,22 @@ function LoginContent() {
   const reasonParam = searchParams.get('reason');
   const isInactive = reasonParam === 'inactive';
 
+  const { data: session, status } = useSession();
+
   const [activeTab, setActiveTab] = useState<'benfeitor' | 'admin'>('benfeitor');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Redireciona automaticamente se já estiver autenticado
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      const dest = (session.user.role === 'ADMIN' || session.user.role === 'EDITOR')
+        ? '/admin/dashboard'
+        : '/associado/dashboard';
+      window.location.href = dest;
+    }
+  }, [status, session]);
 
   useEffect(() => {
     if (typeParam === 'admin') {
@@ -52,9 +64,11 @@ function LoginContent() {
     setErrorMsg(null);
 
     try {
+      const destination = activeTab === 'admin' ? '/admin/dashboard' : '/associado/dashboard';
       const res = await signIn('credentials', {
         email: values.email,
         password: values.password,
+        callbackUrl: destination,
         redirect: false,
       });
 
@@ -64,19 +78,7 @@ function LoginContent() {
         return;
       }
 
-      // Consulta a sessão recém-criada para verificar a role e fazer o redirecionamento adequado
-      const sessionRes = await fetch('/api/auth/session');
-      const session = await sessionRes.json();
-      const role = session?.user?.role;
-
-      if (role === 'ADMIN' || role === 'EDITOR') {
-        router.push('/admin/dashboard');
-      } else if (role === 'BENEFACTOR') {
-        router.push('/associado/dashboard');
-      } else {
-        router.push('/');
-      }
-      router.refresh();
+      window.location.href = destination;
     } catch (err) {
       console.error(err);
       setErrorMsg('Ocorreu um erro no servidor. Tente novamente mais tarde.');
