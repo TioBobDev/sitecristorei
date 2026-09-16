@@ -39,6 +39,12 @@ function validateCPF(cpf: string) {
 
 const ranks = [
   {
+    name: 'Marechal',
+    value: 1500,
+    desc: 'O mais alto grau de honra, apadrinhamento e dedicação máxima às obras sociais.',
+    benefits: ['Acesso a comunicados privados', 'Certificado físico de Honra Diamante', 'Nome em destaque na placa de benfeitores', 'Participação em fóruns e conselhos'],
+  },
+  {
     name: 'Coronel',
     value: 1000,
     desc: 'O mais alto grau de apadrinhamento e dedicação social.',
@@ -113,7 +119,9 @@ export function DonationModal({ open, onOpenChange }: DonationModalProps) {
   const router = useRouter();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [selectedRank, setSelectedRank] = useState(ranks[5]); // Segundo Tenente padrão
+  const [selectedRank, setSelectedRank] = useState(
+    ranks.find((r) => r.name === 'Segundo Tenente') || ranks[0]
+  ); // Segundo Tenente padrão
   const [customAmount, setCustomAmount] = useState<string>('50');
   const [copied, setCopied] = useState(false);
   const [submitting, setSubmitting] = useState(false);

@@ -320,55 +320,57 @@ export default function PostsAdminPage() {
         {/* Listagem (Direita) */}
         <div className="xl:col-span-7">
           <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-            <Table>
-              <TableHeader className="bg-muted/40">
-                <TableRow>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Título</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Projeto / Categoria</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Autor</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground text-center">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-muted/40">
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground animate-pulse font-medium">
-                      Carregando posts...
-                    </TableCell>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground min-w-[200px]">Título</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground whitespace-nowrap">Projeto / Categoria</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground whitespace-nowrap">Autor</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground text-center whitespace-nowrap w-[100px]">Ações</TableHead>
                   </TableRow>
-                ) : posts.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground font-medium">
-                      Nenhuma postagem realizada ainda.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  posts.map((post) => (
-                    <TableRow key={post.id} className="hover:bg-muted/10 transition">
-                      <TableCell className="font-serif font-bold text-primary dark:text-primary-foreground">
-                        {post.title}
-                      </TableCell>
-                      <TableCell className="text-xs text-secondary font-bold uppercase tracking-wider">
-                        {post.category.name}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground font-semibold">
-                        {post.author.name}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <Button size="icon" variant="ghost" onClick={() => handleEdit(post)} className="h-8 w-8 cursor-pointer text-blue-500 hover:text-blue-600">
-                            <Edit2 className="h-4 w-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDelete(post.id)} className="h-8 w-8 cursor-pointer text-red-500 hover:text-red-600">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground animate-pulse font-medium">
+                        Carregando posts...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : posts.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground font-medium">
+                        Nenhuma postagem realizada ainda.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    posts.map((post) => (
+                      <TableRow key={post.id} className="hover:bg-muted/10 transition">
+                        <TableCell className="font-serif font-bold text-primary dark:text-primary-foreground whitespace-normal break-words min-w-[200px]">
+                          {post.title}
+                        </TableCell>
+                        <TableCell className="text-xs text-secondary font-bold uppercase tracking-wider whitespace-nowrap">
+                          {post.category.name}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-semibold whitespace-nowrap">
+                          {post.author.name}
+                        </TableCell>
+                        <TableCell className="text-center whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-2">
+                            <Button size="icon" variant="ghost" onClick={() => handleEdit(post)} className="h-8 w-8 cursor-pointer text-blue-500 hover:text-blue-600" title="Editar post">
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" onClick={() => handleDelete(post.id)} className="h-8 w-8 cursor-pointer text-red-500 hover:text-red-600" title="Excluir post">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>

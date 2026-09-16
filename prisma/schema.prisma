@@ -44,7 +44,7 @@ model Benefactor {
   birthDate    DateTime
   phone        String
   address      String
-  militaryRank String      // "Coronel" | "Tenente-Coronel" | "Major" | "Capitão" | "Primeiro Tenente" | "Segundo Tenente"
+  militaryRank String      // "Marechal" | "Coronel" | "Tenente-Coronel" | "Major" | "Capitão" | "Primeiro Tenente" | "Segundo Tenente" | "Oficial Espontâneo"
   joinDate     DateTime    @default(now())
   donations    Donation[]
 }

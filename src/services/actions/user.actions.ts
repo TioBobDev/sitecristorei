@@ -70,6 +70,7 @@ export async function registerBenefactor(data: {
 
       // Mapear valores por patente militar
       const rankValues: Record<string, number> = {
+        'Marechal': 1500.0,
         'Coronel': 1000.0,
         'Tenente-Coronel': 500.0,
         'Major': 300.0,
@@ -154,6 +155,7 @@ export async function createDonationForLoggedInUser(userId: string, militaryRank
     }
 
     const rankValues: Record<string, number> = {
+      'Marechal': 1500.0,
       'Coronel': 1000.0,
       'Tenente-Coronel': 500.0,
       'Major': 300.0,

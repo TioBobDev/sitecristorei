@@ -32,6 +32,8 @@ export default function BenfeitoresAdminPage() {
 
   const getRankBadgeColor = (rank: string) => {
     switch (rank) {
+      case 'Marechal':
+        return 'bg-amber-200 text-amber-950 dark:bg-amber-900/50 dark:text-amber-300 border border-amber-400 font-extrabold shadow-xs';
       case 'Coronel':
         return 'bg-amber-100 text-amber-800 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-200';
       case 'Tenente-Coronel':

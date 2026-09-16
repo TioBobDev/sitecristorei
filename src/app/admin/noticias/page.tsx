@@ -298,55 +298,57 @@ export default function NoticiasAdminPage() {
         {/* Listagem (Direita) */}
         <div className="xl:col-span-7">
           <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-            <Table>
-              <TableHeader className="bg-muted/40">
-                <TableRow>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Título</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Autor</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground">Data</TableHead>
-                  <TableHead className="font-bold text-primary dark:text-primary-foreground text-center">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-muted/40">
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground animate-pulse font-medium">
-                      Carregando notícias...
-                    </TableCell>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground min-w-[200px]">Título</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground whitespace-nowrap">Autor</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground whitespace-nowrap">Data</TableHead>
+                    <TableHead className="font-bold text-primary dark:text-primary-foreground text-center whitespace-nowrap w-[100px]">Ações</TableHead>
                   </TableRow>
-                ) : newsList.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground font-medium">
-                      Nenhuma notícia publicada ainda.
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  newsList.map((news) => (
-                    <TableRow key={news.id} className="hover:bg-muted/10 transition">
-                      <TableCell className="font-serif font-bold text-primary dark:text-primary-foreground">
-                        {news.title}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground font-semibold">
-                        {news.author.name}
-                      </TableCell>
-                      <TableCell className="text-xs font-semibold whitespace-nowrap">
-                        {new Date(news.createdAt).toLocaleDateString('pt-BR')}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <Button size="icon" variant="ghost" onClick={() => handleEdit(news)} className="h-8 w-8 cursor-pointer text-blue-500 hover:text-blue-600">
-                            <Edit2 className="h-4 w-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDelete(news.id)} className="h-8 w-8 cursor-pointer text-red-500 hover:text-red-600">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                </TableHeader>
+                <TableBody>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground animate-pulse font-medium">
+                        Carregando notícias...
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : newsList.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-8 text-sm text-muted-foreground font-medium">
+                        Nenhuma notícia publicada ainda.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    newsList.map((news) => (
+                      <TableRow key={news.id} className="hover:bg-muted/10 transition">
+                        <TableCell className="font-serif font-bold text-primary dark:text-primary-foreground whitespace-normal break-words min-w-[200px]">
+                          {news.title}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground font-semibold whitespace-nowrap">
+                          {news.author.name}
+                        </TableCell>
+                        <TableCell className="text-xs font-semibold whitespace-nowrap">
+                          {new Date(news.createdAt).toLocaleDateString('pt-BR')}
+                        </TableCell>
+                        <TableCell className="text-center whitespace-nowrap">
+                          <div className="flex items-center justify-center gap-2">
+                            <Button size="icon" variant="ghost" onClick={() => handleEdit(news)} className="h-8 w-8 cursor-pointer text-blue-500 hover:text-blue-600" title="Editar notícia">
+                              <Edit2 className="h-4 w-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" onClick={() => handleDelete(news.id)} className="h-8 w-8 cursor-pointer text-red-500 hover:text-red-600" title="Excluir notícia">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         </div>
       </div>
