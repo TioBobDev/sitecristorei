@@ -69,7 +69,6 @@ export function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
               src={imgUrl}
               alt={`Imagem ${index + 1} de ${projectName}`}
               className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-              fallbackSrc="/images/logo.png"
             />
             {/* Hover overlay com efeito visual */}
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">

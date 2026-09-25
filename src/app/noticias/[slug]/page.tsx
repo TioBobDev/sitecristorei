@@ -63,7 +63,6 @@ export default async function NewsDetailPage({ params }: Params) {
               src={news.coverImage}
               alt={news.title}
               className="w-full h-full object-cover"
-              fallbackSrc="/images/logo.png"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-2xl font-bold">
@@ -95,7 +94,6 @@ export default async function NewsDetailPage({ params }: Params) {
                     src={imgUrl}
                     alt={`Imagem ${index + 1} de ${news.title}`}
                     className="w-full h-full object-cover"
-                    fallbackSrc="/images/logo.png"
                   />
                 </div>
               ))}

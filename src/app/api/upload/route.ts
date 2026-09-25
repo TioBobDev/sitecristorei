@@ -39,18 +39,30 @@ export async function POST(request: Request) {
     const filename = `${uniqueSuffix}.${fileExtension}`;
     const filepath = join(uploadsDir, filename);
 
-    // Escreve o arquivo no sistema local
-    await writeFile(filepath, buffer);
+    // Tenta escrever no disco local (se o ambiente permitir gravação)
+    try {
+      await writeFile(filepath, buffer);
+    } catch (diskErr) {
+      console.warn('Aviso: Não foi possível gravar arquivo no disco local:', diskErr);
+    }
 
     const relativePath = `/uploads/${filename}`;
 
-    // Registra a mídia no banco de dados para consulta posterior se necessário
-    const media = await prisma.mediaFile.create({
-      data: {
+    // Salva a mídia com o buffer completo no banco de dados para nunca perder em deploys
+    const media = await prisma.mediaFile.upsert({
+      where: { filepath: relativePath },
+      update: {
+        filename: originalName,
+        filetype: file.type,
+        size: file.size,
+        data: buffer,
+      },
+      create: {
         filename: originalName,
         filepath: relativePath,
         filetype: file.type,
         size: file.size,
+        data: buffer,
       },
     });
 

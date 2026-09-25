@@ -22,9 +22,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         try {
-          console.log(`[AUTH_DIAGNOSTIC] Tentando buscar usuário por email: ${credentials.email}`);
+          const emailNormalized = (credentials.email as string).trim().toLowerCase();
+          console.log(`[AUTH_DIAGNOSTIC] Tentando buscar usuário por email: ${emailNormalized}`);
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
+            where: { email: emailNormalized },
           });
 
           if (!user) {

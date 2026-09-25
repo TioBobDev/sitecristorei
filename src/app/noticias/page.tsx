@@ -34,7 +34,6 @@ export default async function NoticiasPage() {
                   src={newsList[0].coverImage}
                   alt={newsList[0].title}
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  fallbackSrc="/images/logo.png"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-2xl font-bold">
@@ -98,7 +97,6 @@ export default async function NoticiasPage() {
                       src={news.coverImage}
                       alt={news.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      fallbackSrc="/images/logo.png"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-r from-primary/10 to-primary/30 flex items-center justify-center text-secondary font-serif text-lg font-bold">

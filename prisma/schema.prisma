@@ -160,9 +160,10 @@ model SiteSettings {
 model MediaFile {
   id        String   @id @default(uuid())
   filename  String
-  filepath  String
+  filepath  String   @unique
   filetype  String
   size      Int
+  data      Bytes?   @db.LongBlob
   createdAt DateTime @default(now())
 }
 

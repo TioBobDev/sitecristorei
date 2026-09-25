@@ -19,45 +19,32 @@ interface HomeCarouselProps {
 
 export function HomeCarousel({ slides }: HomeCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [failedSlideIds, setFailedSlideIds] = useState<Record<string, boolean>>({});
+
+  const validSlides = (slides || []).filter((s) => s.imageUrl && !failedSlideIds[s.id]);
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  }, [slides.length]);
+    setCurrentIndex((prev) => (prev === 0 ? validSlides.length - 1 : prev - 1));
+  }, [validSlides.length]);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  }, [slides.length]);
+    setCurrentIndex((prev) => (prev === validSlides.length - 1 ? 0 : prev + 1));
+  }, [validSlides.length]);
 
   // Autoplay do carrossel
   useEffect(() => {
-    if (slides.length <= 1) return;
+    if (validSlides.length <= 1) return;
     const interval = setInterval(nextSlide, 6000); // Muda a cada 6 segundos
     return () => clearInterval(interval);
-  }, [slides.length, nextSlide]);
+  }, [validSlides.length, nextSlide]);
 
-  if (slides.length === 0) {
-    // Carrossel padrão/fallback caso não haja imagens cadastradas
-    return (
-      <div 
-        className="relative w-full max-h-[500px] bg-gradient-to-r from-primary to-secondary/60 flex items-center justify-center text-center p-6 border-b border-secondary/20"
-        style={{ aspectRatio: '1920/555' }}
-      >
-        <div className="max-w-2xl text-primary-foreground space-y-2 sm:space-y-4">
-          <h2 className="font-serif text-xl sm:text-3xl md:text-5xl font-bold text-ouro-bianco">
-            Associação Cristo Rei do Universo
-          </h2>
-          <p className="text-xs sm:text-sm md:text-lg text-primary-foreground/90 font-medium line-clamp-2 sm:line-clamp-none">
-            Transformando vidas através da educação, cultura, fé e solidariedade.
-          </p>
-          <div className="pt-1 sm:pt-2">
-            <Button render={<Link href="#seja-benfeitor" />} className="bg-secondary text-primary hover:bg-secondary/90 text-xs sm:text-sm font-bold cursor-pointer h-8 sm:h-10">
-              Faça Parte do Exército de Cristo Rei
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
+  // Se não houver banners cadastrados ou válidos, NÃO MOSTRA NADA
+  if (!validSlides || validSlides.length === 0) {
+    return null;
   }
+
+  // Ajusta currentIndex se ultrapassar o tamanho após falha de imagem
+  const safeIndex = currentIndex >= validSlides.length ? 0 : currentIndex;
 
   return (
     <div 
@@ -65,20 +52,21 @@ export function HomeCarousel({ slides }: HomeCarouselProps) {
       style={{ aspectRatio: '1920/555' }}
     >
       {/* Slides */}
-      {slides.map((slide, index) => (
+      {validSlides.map((slide, index) => (
         <div
           key={slide.id}
           className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
-            index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+            index === safeIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
-          {/* Imagem de Fundo */}
+          {/* Imagem de Fundo (sem banners fakes de fallback) */}
           <img
             src={slide.imageUrl}
             alt={slide.title || 'Banner'}
             className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/images/carousel/hero-1.jpg';
+            onError={() => {
+              // Marca o slide com erro para removê-lo em vez de exibir imagem fake
+              setFailedSlideIds((prev) => ({ ...prev, [slide.id]: true }));
             }}
           />
 

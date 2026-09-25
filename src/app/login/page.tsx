@@ -64,9 +64,10 @@ function LoginContent() {
     setErrorMsg(null);
 
     try {
+      const emailNormalized = values.email.trim().toLowerCase();
       const destination = activeTab === 'admin' ? '/admin/dashboard' : '/associado/dashboard';
       const res = await signIn('credentials', {
-        email: values.email,
+        email: emailNormalized,
         password: values.password,
         callbackUrl: destination,
         redirect: false,
@@ -76,6 +77,22 @@ function LoginContent() {
         setErrorMsg('E-mail ou senha inválidos.');
         setLoading(false);
         return;
+      }
+
+      // Redireciona de forma inteligente de acordo com o papel (role) real do usuário
+      try {
+        const sessionRes = await fetch('/api/auth/session');
+        const sessionData = await sessionRes.json();
+        const role = sessionData?.user?.role;
+        if (role === 'ADMIN' || role === 'EDITOR') {
+          window.location.href = '/admin/dashboard';
+          return;
+        } else if (role === 'BENEFACTOR') {
+          window.location.href = '/associado/dashboard';
+          return;
+        }
+      } catch (errSession) {
+        console.error('Falha ao obter role da sessão:', errSession);
       }
 
       window.location.href = destination;

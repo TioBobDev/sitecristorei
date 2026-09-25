@@ -1,6 +1,8 @@
 import type { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'sitecristorei_secret_token_chave_2026',
   session: { strategy: 'jwt' },
   providers: [], // Injetado no auth.ts que roda em Node.js
   callbacks: {

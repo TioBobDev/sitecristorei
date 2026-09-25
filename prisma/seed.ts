@@ -99,35 +99,8 @@ async function main() {
     }
   }
 
-  // 4. Criar Imagens de Carrossel Iniciais
-  const carouselImages = [
-    {
-      title: 'Bem-vindo ao Exército de Cristo Rei',
-      description: 'Ajude-nos a transformar vidas na comunidade através da educação e da fé.',
-      imageUrl: '/images/carousel/hero-1.jpg',
-      linkUrl: '#seja-benfeitor',
-      order: 1,
-    },
-    {
-      title: 'Aulas de Música para Jovens',
-      description: 'Despertando talentos e abrindo novos caminhos por meio da arte musical.',
-      imageUrl: '/images/carousel/hero-2.jpg',
-      linkUrl: '/projetos/aula-de-musica',
-      order: 2,
-    },
-  ];
-
-  const carouselCount = await prisma.carouselImage.count();
-  if (carouselCount === 0) {
-    for (const img of carouselImages) {
-      await prisma.carouselImage.create({
-        data: img,
-      });
-    }
-    console.log('Imagens do carrossel inicial criadas.');
-  } else {
-    console.log('Imagens do carrossel já existem.');
-  }
+  // 4. Carrossel de Banners (Apenas os banners cadastrados pelo usuário serão exibidos)
+  // De acordo com os requisitos: se não tiver banner cadastrado, não aparece NADA.
 
   // 5. Criar Notícias Iniciais
   const newsCount = await prisma.news.count();
@@ -173,6 +146,221 @@ async function main() {
     console.log('Comunicados de exemplo criados.');
   } else {
     console.log('Comunicados de exemplo já existem.');
+  }
+
+  // 7. Criar Postagens de Exemplo (Posts dos Projetos)
+  const postsCount = await prisma.post.count();
+  if (postsCount === 0) {
+    const cats = await prisma.category.findMany();
+    const getCat = (slug: string) => cats.find((c) => c.slug === slug)?.id || cats[0]?.id;
+
+    const samplePosts = [
+      {
+        title: 'Avanço no Reforço Escolar das Crianças da Comunidade',
+        slug: 'avanco-reforco-escolar-comunidade',
+        summary: 'Mais de 60 crianças receberam apoio pedagógico e melhoraram seu rendimento escolar.',
+        content: '<p>Com dedicação dos professores voluntários e suporte dos benfeitores, nosso reforço escolar tem gerado frutos reais no aprendizado de matemática e língua portuguesa.</p>',
+        coverImage: '/images/categories/reforco-pedagogico.jpg',
+        status: 'Published',
+        authorId: editor.id,
+        categoryId: getCat('reforco-pedagogico'),
+      },
+      {
+        title: 'Primeiros Alunos Concluem Curso de Informática',
+        slug: 'primeiros-alunos-concluem-curso-informatica',
+        summary: 'Jovens receberam certificado de qualificação profissional em informática básica.',
+        content: '<p>A primeira turma de inclusão digital concluiu com êxito todas as etapas de computação e internet para o mercado de trabalho.</p>',
+        coverImage: '/images/categories/aula-de-informatica.jpg',
+        status: 'Published',
+        authorId: editor.id,
+        categoryId: getCat('aula-de-informatica'),
+      },
+      {
+        title: 'Apresentação de Violão e Coral no Santuário',
+        slug: 'apresentacao-violao-coral-santuario',
+        summary: 'Alunos da oficina de música emocionaram o público em recital especial.',
+        content: '<p>A música transforma trajetórias. No último domingo, nossos jovens instrumentistas e o coral juvenil realizaram sua primeira apresentação aberta.</p>',
+        coverImage: '/images/categories/aula-de-musica.jpg',
+        status: 'Published',
+        authorId: editor.id,
+        categoryId: getCat('aula-de-musica'),
+      },
+      {
+        title: 'Pilates e Saúde Física na Terceira Idade',
+        slug: 'pilates-saude-fisica-terceira-idade',
+        summary: 'Encontros semanais garantem mais mobilidade, saúde e qualidade de vida aos idosos.',
+        content: '<p>Nossas turmas de pilates contam com fisioterapeutas voluntários oferecendo acolhimento, alívio de dores e integração aos participantes da comunidade.</p>',
+        coverImage: '/images/categories/pilates.jpg',
+        status: 'Published',
+        authorId: editor.id,
+        categoryId: getCat('pilates'),
+      },
+    ];
+
+    for (const p of samplePosts) {
+      if (p.categoryId) {
+        await prisma.post.create({ data: p });
+      }
+    }
+    console.log('Postagens de exemplo criadas.');
+  } else {
+    console.log('Postagens já existem.');
+  }
+
+  // 8. Criar Benfeitores e Doações de Exemplo
+  function generateValidCPF(baseNumber: number): string {
+    const numStr = String(baseNumber).padStart(9, '0').slice(0, 9);
+    let d1 = 0;
+    for (let i = 0; i < 9; i++) {
+      d1 += parseInt(numStr[i]) * (10 - i);
+    }
+    let rev1 = 11 - (d1 % 11);
+    if (rev1 >= 10) rev1 = 0;
+
+    const numStr10 = numStr + rev1;
+    let d2 = 0;
+    for (let i = 0; i < 10; i++) {
+      d2 += parseInt(numStr10[i]) * (11 - i);
+    }
+    let rev2 = 11 - (d2 % 11);
+    if (rev2 >= 10) rev2 = 0;
+
+    return numStr + rev1 + rev2;
+  }
+
+  const benefactorsCount = await prisma.benefactor.count();
+  if (benefactorsCount === 0) {
+    const defaultPassword = await bcrypt.hash('123456', 10);
+
+    const sampleBenefactors = [
+      {
+        name: 'Carlos Alberto Silveira',
+        email: 'carlos.silveira@cristorei.org',
+        rank: 'Marechal',
+        phone: '(11) 98765-4321',
+        address: 'Av. Paulista, 1500 - Bela Vista, São Paulo - SP',
+        donations: [1500.0, 1500.0],
+      },
+      {
+        name: 'Maria Helena Albuquerque',
+        email: 'maria.helena@cristorei.org',
+        rank: 'Coronel',
+        phone: '(11) 97654-3210',
+        address: 'Rua Oscar Freire, 800 - Jardins, São Paulo - SP',
+        donations: [1000.0, 1000.0, 1000.0],
+      },
+      {
+        name: 'Roberto Fernandes Dias',
+        email: 'roberto.dias@cristorei.org',
+        rank: 'Tenente-Coronel',
+        phone: '(11) 96543-2109',
+        address: 'Rua Domingos de Morais, 420 - Vila Mariana, São Paulo - SP',
+        donations: [500.0, 500.0],
+      },
+      {
+        name: 'Ana Paula Medeiros',
+        email: 'ana.medeiros@cristorei.org',
+        rank: 'Major',
+        phone: '(11) 95432-1098',
+        address: 'Rua Pamplona, 310 - Jardim Paulista, São Paulo - SP',
+        donations: [300.0, 300.0, 300.0],
+      },
+      {
+        name: 'Fernando Augusto Lima',
+        email: 'fernando.lima@cristorei.org',
+        rank: 'Capitão',
+        phone: '(11) 94321-0987',
+        address: 'Rua Augusta, 1200 - Consolação, São Paulo - SP',
+        donations: [200.0, 200.0],
+      },
+      {
+        name: 'Juliana Costa Ferreira',
+        email: 'juliana.costa@cristorei.org',
+        rank: 'Primeiro Tenente',
+        phone: '(11) 93210-9876',
+        address: 'Rua Vergueiro, 950 - Liberdade, São Paulo - SP',
+        donations: [100.0, 100.0],
+      },
+      {
+        name: 'Lucas Gabriel Martins',
+        email: 'lucas.martins@cristorei.org',
+        rank: 'Segundo Tenente',
+        phone: '(11) 92109-8765',
+        address: 'Rua Teodoro Sampaio, 600 - Pinheiros, São Paulo - SP',
+        donations: [50.0, 50.0],
+      },
+      {
+        name: 'Patrícia Rocha Mendes',
+        email: 'patricia.mendes@cristorei.org',
+        rank: 'Oficial Espontâneo',
+        phone: '(11) 91098-7654',
+        address: 'Av. Brigadeiro Faria Lima, 2000 - Itaim Bibi, São Paulo - SP',
+        donations: [150.0, 250.0],
+      },
+    ];
+
+    let baseCpfSeed = 123456780;
+    for (const ben of sampleBenefactors) {
+      baseCpfSeed += 13;
+      const user = await prisma.user.create({
+        data: {
+          name: ben.name,
+          email: ben.email,
+          passwordHash: defaultPassword,
+          role: Role.BENEFACTOR,
+        },
+      });
+
+      const benefactor = await prisma.benefactor.create({
+        data: {
+          userId: user.id,
+          cpf: generateValidCPF(baseCpfSeed),
+          birthDate: new Date('1985-05-15'),
+          phone: ben.phone,
+          address: ben.address,
+          militaryRank: ben.rank,
+        },
+      });
+
+      for (const amount of ben.donations) {
+        await prisma.donation.create({
+          data: {
+            amount,
+            status: 'CONFIRMED',
+            benefactorId: benefactor.id,
+            date: new Date(Date.now() - Math.floor(Math.random() * 30 * 24 * 60 * 60 * 1000)),
+          },
+        });
+      }
+    }
+    console.log(`${sampleBenefactors.length} Benfeitores e doações de exemplo criados.`);
+  } else {
+    console.log('Benfeitores já existem.');
+  }
+
+  // 9. Criar Logs Administrativos Iniciais
+  const logsCount = await prisma.adminLog.count();
+  if (logsCount === 0) {
+    await prisma.adminLog.createMany({
+      data: [
+        {
+          userId: admin.id,
+          action: 'Inicialização do Sistema',
+          details: 'Banco de dados populado com dados iniciais e categorias.',
+        },
+        {
+          userId: admin.id,
+          action: 'Cadastro de Benfeitores',
+          details: 'Primeiros benfeitores do Exército de Cristo Rei adicionados com sucesso.',
+        },
+        {
+          userId: editor.id,
+          action: 'Publicação de Notícias',
+          details: 'Artigos sobre as obras sociais e reforço pedagógico publicados.',
+        },
+      ],
+    });
+    console.log('Logs administrativos de exemplo criados.');
   }
 
   console.log('Semeadura do banco de dados concluída com sucesso!');
