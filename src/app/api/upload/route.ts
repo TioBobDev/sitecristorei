@@ -49,22 +49,32 @@ export async function POST(request: Request) {
     const relativePath = `/uploads/${filename}`;
 
     // Salva a mídia com o buffer completo no banco de dados para nunca perder em deploys
-    const media = await prisma.mediaFile.upsert({
+    const existing = await prisma.mediaFile.findFirst({
       where: { filepath: relativePath },
-      update: {
-        filename: originalName,
-        filetype: file.type,
-        size: file.size,
-        data: buffer,
-      },
-      create: {
-        filename: originalName,
-        filepath: relativePath,
-        filetype: file.type,
-        size: file.size,
-        data: buffer,
-      },
     });
+
+    let media;
+    if (existing) {
+      media = await prisma.mediaFile.update({
+        where: { id: existing.id },
+        data: {
+          filename: originalName,
+          filetype: file.type,
+          size: file.size,
+          data: buffer,
+        },
+      });
+    } else {
+      media = await prisma.mediaFile.create({
+        data: {
+          filename: originalName,
+          filepath: relativePath,
+          filetype: file.type,
+          size: file.size,
+          data: buffer,
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,

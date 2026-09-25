@@ -160,7 +160,7 @@ model SiteSettings {
 model MediaFile {
   id        String   @id @default(uuid())
   filename  String
-  filepath  String   @unique
+  filepath  String
   filetype  String
   size      Int
   data      Bytes?   @db.LongBlob
