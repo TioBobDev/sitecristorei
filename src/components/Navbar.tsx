@@ -11,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { DonationModal } from './DonationModal';
 import { signOut } from 'next-auth/react';
 
 interface NavbarProps {
@@ -29,7 +28,6 @@ interface NavbarProps {
 export function Navbar({ categories, siteSettings, session }: NavbarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [donationOpen, setDonationOpen] = useState(false);
 
   const isPanelPath = pathname.startsWith('/admin') || pathname.startsWith('/associado');
   if (isPanelPath) return null;
@@ -116,12 +114,14 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <button
-              onClick={() => setDonationOpen(true)}
-              className={`text-sm font-medium transition hover:text-secondary text-foreground/85 cursor-pointer`}
+            <Link
+              href="/seja-um-benfeitor"
+              className={`text-sm font-medium transition hover:text-secondary ${
+                isActive('/seja-um-benfeitor') ? 'text-secondary font-semibold' : 'text-foreground/85'
+              }`}
             >
               Seja um Benfeitor
-            </button>
+            </Link>
             <Link
               href="/contato"
               className={`text-sm font-medium transition hover:text-secondary ${
@@ -137,7 +137,7 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setDonationOpen(true)}
+              render={<Link href="/seja-um-benfeitor" />}
               className="gap-2 border-secondary text-secondary hover:bg-secondary hover:text-ouro-bianco transition font-semibold cursor-pointer"
             >
               <Heart className="h-4 w-4 fill-current" />
@@ -227,7 +227,7 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setDonationOpen(true)}
+              render={<Link href="/seja-um-benfeitor" />}
               className="border-secondary text-secondary hover:bg-secondary hover:text-ouro-bianco cursor-pointer"
             >
               <Heart className="h-4 w-4 fill-current" />
@@ -283,15 +283,15 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
                 )}
               </div>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  setDonationOpen(true);
-                }}
-                className="text-left text-base font-semibold text-foreground cursor-pointer"
+              <Link
+                href="/seja-um-benfeitor"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`text-left text-base font-semibold ${
+                  isActive('/seja-um-benfeitor') ? 'text-secondary font-semibold' : 'text-foreground'
+                }`}
               >
                 Seja um Benfeitor
-              </button>
+              </Link>
 
               <Link
                 href="/contato"
@@ -388,8 +388,6 @@ export function Navbar({ categories, siteSettings, session }: NavbarProps) {
         )}
       </header>
 
-      {/* Modal de Doação PIX */}
-      <DonationModal open={donationOpen} onOpenChange={setDonationOpen} />
     </>
   );
 }

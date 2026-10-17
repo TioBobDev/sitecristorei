@@ -243,7 +243,7 @@ function LoginContent() {
         {activeTab === 'benfeitor' ? (
           <div className="text-center text-xs text-muted-foreground font-medium pt-2">
             Não é um benfeitor cadastrado?{' '}
-            <Link href="/#seja-benfeitor" className="text-secondary hover:underline font-bold cursor-pointer">
+            <Link href="/seja-um-benfeitor" className="text-secondary hover:underline font-bold cursor-pointer">
               Seja um Benfeitor
             </Link>
           </div>

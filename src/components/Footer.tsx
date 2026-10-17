@@ -97,7 +97,7 @@ export function Footer({ siteSettings }: FooterProps) {
           </p>
           <div>
             <Link
-              href="/#seja-benfeitor"
+              href="/seja-um-benfeitor"
               className="inline-flex items-center gap-2 text-sm font-bold text-ouro hover:underline"
             >
               <Heart className="h-4 w-4 fill-current" />
